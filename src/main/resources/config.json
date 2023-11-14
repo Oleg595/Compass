@@ -1,0 +1,85 @@
+{
+  "criterias": [
+    {
+      "name": "Salary",
+      "values": [
+        "Below average",
+        "Average",
+        "High"
+      ]
+    },
+    {
+      "name": "Location",
+      "values": [
+        "Far",
+        "Some distance",
+        "Almost ideal"
+      ]
+    },
+    {
+      "name": "Type",
+      "values": [
+        "Inappropriate",
+        "Good enough",
+        "Almost ideal"
+      ]
+    },
+    {
+      "name": "Training possibilities",
+      "values": [
+        "Almost none",
+        "Normal",
+        "Nice"
+      ]
+    }
+  ],
+
+
+  "alts": [
+    {
+      "name": "Job A",
+      "criteriaToValue": {
+        "Salary": "Below average",
+        "Location": "Some distance",
+        "Type": "Inappropriate",
+        "Training possibilities": "Nice"
+      }
+    },
+    {
+      "name": "Job B",
+      "criteriaToValue": {
+        "Salary": "Average",
+        "Location": "Far",
+        "Type": "Inappropriate",
+        "Training possibilities": "Normal"
+      }
+    },
+    {
+      "name": "Job C",
+      "criteriaToValue": {
+        "Salary": "Below average",
+        "Location": "Some distance",
+        "Type": "Good enough",
+        "Training possibilities": "Nice"
+      }
+    },
+    {
+      "name": "Job D",
+      "criteriaToValue": {
+        "Salary": "Average",
+        "Location": "Some distance",
+        "Type": "Good enough",
+        "Training possibilities": "Nice"
+      }
+    },
+    {
+      "name": "Job E",
+      "criteriaToValue": {
+        "Salary": "High",
+        "Location": "Some distance",
+        "Type": "Inappropriate",
+        "Training possibilities": "Almost none"
+      }
+    }
+  ]
+}
