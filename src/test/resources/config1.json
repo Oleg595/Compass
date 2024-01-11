@@ -81,6 +81,14 @@
         "Location": "Some distance",
         "Type": "Good enough"
       }
+    },
+    {
+      "name": "Job D",
+      "criteriaToValue": {
+        "Salary": "High",
+        "Location": "Almost ideal",
+        "Type": "Inappropriate"
+      }
     }
   ]
 }

@@ -3,7 +3,7 @@ package com.example.compas.service;
 import com.example.compas.context.DataContext;
 import com.example.compas.entity.AlternativeEntity;
 import com.example.compas.entity.CriteriaEntity;
-import com.example.compas.util.AlternativePair;
+import com.example.compas.entity.AlternativePair;
 import lombok.AllArgsConstructor;
 import org.ejml.data.DMatrixRMaj;
 import org.springframework.stereotype.Service;
@@ -23,10 +23,6 @@ public class CompareValueService {
         "эквивалентны";
 
     private final DataContext dataContext;
-
-//    private enum CompareAlternatives {
-//        MORE, EQUAL, LESS, NONE
-//    }
 
     private void processAnswer(DMatrixRMaj matrix, int x, int y, int ans, CriteriaEntity criteria, String valueX,
                                String valueY) {
@@ -87,12 +83,6 @@ public class CompareValueService {
         }
     }
 
-    public void processCriterias() {
-        for (var criteria : dataContext.getCriterias()) {
-            processAnswers(criteria);
-        }
-    }
-
     private void processAnswer(int answer, AlternativePair pair) {
         switch (answer) {
             case 1:
@@ -146,6 +136,12 @@ public class CompareValueService {
                 (ALTERNATIVE_QUESTION) + "%n", getCriterias(pair.getFirst()),
                 getAlternative(pair.getFirst()), getAlternative(pair.getSecond()));
             processAnswer(reader.nextInt(), pair);
+        }
+    }
+
+    public void processCriterias() {
+        for (var criteria : dataContext.getCriterias()) {
+            processAnswers(criteria);
         }
     }
 }

@@ -1,22 +1,40 @@
 package com.example.compas.context;
 
 import com.example.compas.entity.AlternativeEntity;
+import com.example.compas.entity.AlternativePair;
 import com.example.compas.entity.CriteriaEntity;
-import com.example.compas.util.AlternativePair;
+import com.example.compas.service.AlternativeService;
 import lombok.Data;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.data.Matrix;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Data
 @Component
 public class DataContext {
-    private List<CriteriaEntity> criterias;
+
+    @Lazy
+    @Autowired
+    private AlternativeService alternativeService;
+
     private List<AlternativeEntity> alts;
+    private List<CriteriaEntity> criterias = new ArrayList<>();
     private List<AlternativePair> P = new ArrayList<>();
     private List<AlternativePair> I = new ArrayList<>();
+
+    public CriteriaEntity getCriteriaByNameOrNull(String name) {
+        for (var criteria : criterias) {
+            if (criteria.getName().equals(name)) {
+                return criteria;
+            }
+        }
+        return null;
+    }
 
     public int getM() {
         var result = 0;
@@ -26,48 +44,37 @@ public class DataContext {
         return result;
     }
 
-    private String generateAltName() {
-        return "index_" + (P.size() + I.size());
-    }
-
-    private AlternativePair calculateAlts(List<CriteriaEntity> crts, List<String> val1, List<String> val2) {
-        assert crts.size() == val1.size() && crts.size() == val2.size();
-        var alt1 = new AlternativeEntity(generateAltName(), new HashMap<>());
-        var alt2 = new AlternativeEntity(generateAltName(), new HashMap<>());
-        for (var criteria : criterias) {
-            if (crts.contains(criteria)) {
-                var index = crts.indexOf(criteria);
-                alt1.getCriteriaToValue().put(criteria.getName(), val1.get(index));
-                alt2.getCriteriaToValue().put(criteria.getName(), val2.get(index));
-            } else {
-                alt1.getCriteriaToValue().put(criteria.getName(), null);
-                alt2.getCriteriaToValue().put(criteria.getName(), null);
-            }
-        }
-        return new AlternativePair(alt1, alt2);
-    }
-
     public void addP(List<CriteriaEntity> crts, List<String> val1, List<String> val2) {
-        P.add(calculateAlts(crts, val1, val2));
+        P.add(alternativeService.calculate(crts, val1, val2));
     }
 
     public void addI(List<CriteriaEntity> crts, List<String> val1, List<String> val2) {
-        I.add(calculateAlts(crts, val1, val2));
+        I.add(alternativeService.calculate(crts, val1, val2));
     }
 
-    public AlternativeEntity createAltByDelta(List<Double> delta) {
-        var count = 0;
-        var criteriaToValue = new HashMap<String, String>();
-        for (var criteria: criterias) {
-            String value = null;
-            for (var index = 0; index < criteria.getValues().size(); ++index) {
-                if (delta.get(index + count) > 0.0) {
-                    value = criteria.getValues().get(index);
-                }
+    public void addCriteria(CriteriaEntity criteria) {
+        criterias.add(criteria);
+    }
+
+    public DMatrixRMaj calculateDMatrix() {
+        var result = new DMatrixRMaj(getM(), P.size());
+        for (var col = 0; col < P.size(); ++col) {
+            var delta = alternativeService.calculateDelta(P.get(col));
+            for (var row = 0; row < delta.size(); ++row) {
+                result.set(row, col, delta.get(row));
             }
-            criteriaToValue.put(criteria.getName(), value);
-            count += criteria.getValues().size();
         }
-        return new AlternativeEntity(generateAltName(), criteriaToValue);
+        return result;
+    }
+
+    public DMatrixRMaj calculateEMatrix() {
+        var result = new DMatrixRMaj(getM(), I.size());
+        for (var col = 0; col < I.size(); ++col) {
+            var delta = alternativeService.calculateDelta(I.get(col));
+            for (var row = 0; row < delta.size(); ++row) {
+                result.set(row, col, delta.get(row));
+            }
+        }
+        return result;
     }
 }
