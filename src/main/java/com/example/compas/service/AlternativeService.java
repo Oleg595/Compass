@@ -62,7 +62,9 @@ public class AlternativeService {
         for (var criteria : dataContext.getCriterias()) {
             var values = new ArrayList<>(criteria.getValues());
             var index = values.indexOf(alt.getValueByCriteria(criteria));
-            result.set(count + index, 1.0);
+            if (index != -1) {
+                result.set(count + index, 1.0);
+            }
             count += values.size();
         }
         return result;
