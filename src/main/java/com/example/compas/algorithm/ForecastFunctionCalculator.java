@@ -85,11 +85,16 @@ class ForecastFunctionCalculator {
         }
 
         public double getOptP() throws LpSolveException {
-            var solver = createSolver();
-            solver.solve();
-            var result = solver.getPtrVariables()[0];
-            solver.deleteLp();
-            return result;
+            while (true) {
+                var solver = createSolver();
+                solver.solve();
+                if (solver.getStatus() == 0) {
+                    var result = solver.getPtrVariables()[0];
+                    solver.deleteLp();
+                    return result;
+                }
+                solver.deleteLp();
+            }
         }
     }
 
@@ -159,13 +164,19 @@ class ForecastFunctionCalculator {
         }
 
         public List<Double> getOptV(double optP) throws LpSolveException {
-            var solver = createSolver(optP);
-            solver.solve();
-            var result = new ArrayList<Double>();
-            for (var index = 0; index < dataContext.getM(); ++index) {
-                result.add(solver.getPtrVariables()[index]);
+            while (true) {
+                var solver = createSolver(optP);
+                solver.solve();
+                if (solver.getStatus() == 0) {
+                    var result = new ArrayList<Double>();
+                    for (var index = 0; index < dataContext.getM(); ++index) {
+                        result.add(solver.getPtrVariables()[index]);
+                    }
+                    solver.deleteLp();
+                    return result;
+                }
+                solver.deleteLp();
             }
-            return result;
         }
     }
 
