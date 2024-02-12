@@ -12,12 +12,18 @@
     <artifactId>Compas</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Compas</name>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <description>Compas</description>
+    <modules>
+        <module>console</module>
+        <module>algorithm</module>
+    </modules>
+
     <properties>
         <java.version>11</java.version>
-        <start-class>com.example.compas.CompassRunner</start-class>
+        <start-class>com.example.console.CompassRunner</start-class>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,9 +82,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-<!--                <configuration>-->
-<!--                    <mainClass>com.example.compas.CompassRunner</mainClass>-->
-<!--                </configuration>-->
+                <!--                <configuration>-->
+                <!--                    <mainClass>com.example.console.CompassRunner</mainClass>-->
+                <!--                </configuration>-->
                 <executions>
                     <execution>
                         <goals>
@@ -89,5 +95,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
