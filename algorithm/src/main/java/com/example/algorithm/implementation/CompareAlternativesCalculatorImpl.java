@@ -10,6 +10,7 @@ import lpsolve.LpSolveException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // Перепроверить ограничения
@@ -26,7 +27,7 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
 
     private int getDim() {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
-        return 2 * getT() * M + dataContext.getP().size() + dataContext.getI().size() + getT() - 1;
+        return 2 * getT() * M + dataContext.getP().size() + dataContext.getI().size() + getT();
     }
 
     private double calcMv() {
@@ -38,12 +39,15 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
         var goalFunction = new double[getDim()];
         for (var index = 0; index < M; ++index) {
-            goalFunction[2 * index] = v.get(index);
-            goalFunction[2 * index + 1] = -v.get(index);
+            goalFunction[1 + 2 * index] = v.get(index);
+            goalFunction[1 + 2 * index + 1] = -v.get(index);
         }
         for (var index = 0; index < getT() * M; ++index) {
             solver.setBinary(2 * index + 1, true);
             solver.setBinary(2 * index + 2, true);
+        }
+        for (var index = 0; index < getT(); ++index) {
+            solver.setBinary(goalFunction.length - index, true);
         }
         solver.setObjFn(goalFunction);
     }
@@ -77,11 +81,11 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
                 constraint[1 + 2 * col] = v.get(col);
                 constraint[1 + 2 * col + 1] = -v.get(col);
             }
-            for (var col = index * M; col < M; ++col) {
+            for (var col = 0; col < M; ++col) {
                 constraint[1 + 2 * (index * M + col)] = -v.get(col);
                 constraint[1 + 2 * (index * M + col) + 1] = v.get(col);
             }
-            constraint[getDim() - getT() + index] = Mv;
+            constraint[1 + getDim() - getT() + index] = Mv;
             solver.addConstraint(constraint, LpSolve.LE, Mv);
         }
     }
@@ -113,31 +117,59 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
 
     private void addConstraints8(LpSolve solver) throws LpSolveException {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
-        for (var rNum = 0; rNum < getT(); ++rNum) {
-            var count = 0;
-            for (var criteria : dataContext.getCriterias()) {
-                var constraint1 = new double[1 + getDim()];
-                var constraint2 = new double[1 + getDim()];
-                for (var col = 0; col < criteria.getValues().size(); ++col) {
-                    constraint1[1 + 2 * (rNum * M + col) + count] = 1.0;
-                    constraint1[1 + 2 * (rNum * M + col) + count + 1] = -1.0;
-                    constraint2[1 + 2 * (rNum * M + col) + count] = 1.0;
-                }
-                count += 2 * criteria.getValues().size();
-                solver.addConstraint(constraint1, LpSolve.EQ, 0.0);
-                solver.addConstraint(constraint2, LpSolve.LE, 1.0);
+        var count = 0;
+        for (var criteria : dataContext.getCriterias()) {
+            var constraint1 = new double[1 + getDim()];
+            var constraint2 = new double[1 + getDim()];
+            for (var col = 0; col < criteria.getValues().size(); ++col) {
+                constraint1[1 + 2 * col + count] = 1.0;
+                constraint1[1 + 2 * col + 1 + count] = -1.0;
+                constraint2[1 + 2 * col + count] = 1.0;
             }
+            count += 2 * criteria.getValues().size();
+            solver.addConstraint(constraint1, LpSolve.EQ, 0.0);
+            solver.addConstraint(constraint2, LpSolve.LE, 1.0);
         }
+//        for (var rNum = 0; rNum < getT(); ++rNum) {
+//            var count = 0;
+//            for (var criteria : dataContext.getCriterias()) {
+//                var constraint1 = new double[1 + getDim()];
+//                var constraint2 = new double[1 + getDim()];
+//                for (var col = 0; col < criteria.getValues().size(); ++col) {
+//                    constraint1[1 + 2 * (rNum * M + col) + count] = 1.0;
+//                    constraint1[1 + 2 * (rNum * M + col) + count + 1] = -1.0;
+//                    constraint2[1 + 2 * (rNum * M + col) + count] = 1.0;
+//                }
+//                count += 2 * criteria.getValues().size();
+//                solver.addConstraint(constraint1, LpSolve.EQ, 0.0);
+//                solver.addConstraint(constraint2, LpSolve.LE, 1.0);
+//            }
+//        }
     }
 
     private void addConstraints9(LpSolve solver) throws LpSolveException {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
-        for (var rNum = 0; rNum < getT(); ++rNum) {
+        var constraint = new double[1 + getDim()];
+        for (var col = 0; col < M; ++col) {
+            constraint[1 + 2 * col] = 1.0;
+        }
+        solver.addConstraint(constraint, LpSolve.LE, k);
+//        for (var rNum = 0; rNum < getT(); ++rNum) {
+//            var constraint = new double[1 + getDim()];
+//            for (var col = rNum * M; col < (rNum + 1) * M; ++col) {
+//                constraint[1 + 2 * col] = 1.0;
+//            }
+//            solver.addConstraint(constraint, LpSolve.LE, k);
+//        }
+    }
+
+    private void addCustomConstraints(LpSolve solver) throws LpSolveException {
+        var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
+        for (var col = 0; col < M; ++col) {
             var constraint = new double[1 + getDim()];
-            for (var col = rNum * M; col < (rNum + 1) * M; ++col) {
-                constraint[1 + 2 * col] = 1.0;
-            }
-            solver.addConstraint(constraint, LpSolve.LE, k);
+            constraint[1 + 2 * col] = 1.0;
+            constraint[1 + 2 * col + 1] = 1.0;
+            solver.addConstraint(constraint, LpSolve.LE, 1.0);
         }
     }
 
@@ -145,7 +177,7 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
         for (var col = 0; col < dataContext.getP().size(); ++col) {
             var constraint = new double[1 + getDim()];
-            constraint[1 + 2 * M + col] = 1.0;
+            constraint[1 + 2 * M * getT() + col] = 1.0;
             solver.addConstraint(constraint, LpSolve.GE, 0.0);
         }
         for (var col = 0; col < dataContext.getI().size(); ++col) {
@@ -166,6 +198,7 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
         addConstraints7(solver);
         addConstraints8(solver);
         addConstraints9(solver);
+        addCustomConstraints(solver);
         addConstraint10(solver);
         return solver;
     }
@@ -173,32 +206,52 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
     private List<AlternativePair> extractAlternatives(double[] data) {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
         var result = new ArrayList<AlternativePair>();
-        for (var index = 0; index < getT(); ++index) {
-            var delta1 = new ArrayList<Double>();
-            var delta2 = new ArrayList<Double>();
-            for (var col = index * M; col < (index + 1) * M; ++col) {
-                delta1.add(data[2 * col]);
-                delta2.add(data[2 * col + 1]);
-            }
-            if (delta1.stream().anyMatch(it -> it != 0.0) && delta2.stream().anyMatch(it -> it != 0.0)) {
-                var alt1 = AlternativeUtils.createByDelta(delta1, dataContext.getCriterias());
-                var alt2 = AlternativeUtils.createByDelta(delta2, dataContext.getCriterias());
-                result.add(new AlternativePair(alt1, alt2));
-            }
+        var delta1 = new ArrayList<Double>();
+        var delta2 = new ArrayList<Double>();
+        for (var col = 0; col < M; ++col) {
+            delta1.add(data[2 * col]);
+            delta2.add(data[2 * col + 1]);
+        }
+        if (delta1.stream().anyMatch(it -> it != 0.0) && delta2.stream().anyMatch(it -> it != 0.0)) {
+            var alt1 = AlternativeUtils.createByDelta(delta1, dataContext.getCriterias());
+            var alt2 = AlternativeUtils.createByDelta(delta2, dataContext.getCriterias());
+            result.add(new AlternativePair(alt1, alt2));
         }
         return result;
+//        for (var index = 0; index < getT(); ++index) {
+//            var delta1 = new ArrayList<Double>();
+//            var delta2 = new ArrayList<Double>();
+//            for (var col = index * M; col < (index + 1) * M; ++col) {
+//                delta1.add(data[2 * col]);
+//                delta2.add(data[2 * col + 1]);
+//            }
+//            if (delta1.stream().anyMatch(it -> it != 0.0) && delta2.stream().anyMatch(it -> it != 0.0)) {
+//                var alt1 = AlternativeUtils.createByDelta(delta1, dataContext.getCriterias());
+//                var alt2 = AlternativeUtils.createByDelta(delta2, dataContext.getCriterias());
+//                result.add(new AlternativePair(alt1, alt2));
+//            }
+//        }
+//        return result;
     }
 
+    private void printConstraints(LpSolve solver) throws LpSolveException {
+        for (var index = 0; index < solver.getNrows(); ++index) {
+            System.out.println(Arrays.toString(solver.getPtrRow(index)));
+        }
+    }
+
+    @Override
     public List<AlternativePair> getResultVector(
-        DataContext dataContext, int k, List<Double> v, List<Double> delta)
+        int k, List<Double> v, AlternativePair pair, DataContext dataContext)
         throws LpSolveException {
         this.dataContext = dataContext;
         this.k = k;
         this.v = v;
-        this.delta = delta;
+        this.delta = AlternativeUtils.calculateDelta(pair, dataContext.getCriterias());
 
         var solver = createSolver();
         solver.solve();
+//        printConstraints(solver);
         return extractAlternatives(solver.getPtrVariables());
     }
 }

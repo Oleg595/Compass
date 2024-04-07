@@ -17,6 +17,7 @@
     <modules>
         <module>console</module>
         <module>algorithm</module>
+        <module>web</module>
     </modules>
 
     <properties>

@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface CompareAlternativesCalculator {
     List<AlternativePair> getResultVector(
-        DataContext dataContext, int k, List<Double> v, List<Double> delta) throws LpSolveException;
+        int k, List<Double> v, AlternativePair pair, DataContext dataContext)
+        throws LpSolveException;
 }

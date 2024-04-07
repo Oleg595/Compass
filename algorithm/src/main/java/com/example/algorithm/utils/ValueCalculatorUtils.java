@@ -19,7 +19,8 @@ public class ValueCalculatorUtils {
         var P = dataContext.getP();
         var result = new DMatrixRMaj(calculateM(dataContext.getCriterias()), P.size());
         for (var col = 0; col < P.size(); ++col) {
-            var delta = AlternativeUtils.calculateDelta(P.get(col), dataContext.getCriterias());
+            var delta = AlternativeUtils.calculateDelta(
+                P.get(col).getPair(), dataContext.getCriterias());
             for (var row = 0; row < delta.size(); ++row) {
                 result.set(row, col, delta.get(row));
             }
@@ -31,7 +32,8 @@ public class ValueCalculatorUtils {
         var I = dataContext.getI();
         var result = new DMatrixRMaj(calculateM(dataContext.getCriterias()), I.size());
         for (var col = 0; col < I.size(); ++col) {
-            var delta = AlternativeUtils.calculateDelta(I.get(col), dataContext.getCriterias());
+            var delta = AlternativeUtils.calculateDelta(
+                I.get(col).getPair(), dataContext.getCriterias());
             for (var row = 0; row < delta.size(); ++row) {
                 result.set(row, col, delta.get(row));
             }

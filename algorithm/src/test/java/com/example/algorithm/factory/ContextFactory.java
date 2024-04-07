@@ -1,16 +1,16 @@
-package com.example.algorithm;
+package com.example.algorithm.factory;
 
 import com.example.algorithm.context.DataContext;
 import com.example.algorithm.entity.AlternativeEntity;
 import com.example.algorithm.entity.AlternativePair;
 import com.example.algorithm.entity.CriteriaEntity;
-import com.example.algorithm.implementation.rule.SolveSLAU;
-import org.junit.jupiter.api.Test;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-public class SolveSLAUTest {
+@Component
+public class ContextFactory {
     private static final List<String> values = List.of("value1", "value2", "value3");
     private static final List<String> criteriaNames = List.of("criteria1", "criteria2", "criteria3");
 
@@ -37,8 +37,19 @@ public class SolveSLAUTest {
         return dataContext;
     }
 
-    @Test
-    public void testSLAUSolve() {
+    public static List<String> getCriteriaNames() {
+        return criteriaNames;
+    }
+
+    public static List<String> getCriteriaValues() {
+        return values;
+    }
+
+    public DataContext createClearContext() {
+        return generateContext();
+    }
+
+    public DataContext createContext1() {
         var dataContext = generateContext();
 
         // Добавляем 2 потенциальных ответа ЛПР
@@ -62,21 +73,59 @@ public class SolveSLAUTest {
         exportAlter2 = new AlternativeEntity("expertAlter2", criteriaToValue2);
         dataContext.addP(new AlternativePair(expertAlter1, exportAlter2));
 
-        // Создаём альтернативы A,B:
-        var criteriaToValueA = Map.of(
-            criteriaNames.get(0), values.get(0),
-            criteriaNames.get(1), values.get(0),
-            criteriaNames.get(2), values.get(1)
-        );
-        var A = new AlternativeEntity("A", criteriaToValueA);
-        var criteriaToValueB = Map.of(
-            criteriaNames.get(0), values.get(1),
-            criteriaNames.get(1), values.get(1),
-            criteriaNames.get(2), values.get(0)
-        );
-        var B = new AlternativeEntity("B", criteriaToValueB);
+        return dataContext;
+    }
 
-        // Решаем СЛАУ для поиска вывода правила P(A,B):
-        SolveSLAU.generateAndSolve(A, B, dataContext);
+    public DataContext createContext2() {
+        var dataContext = generateContext();
+
+        // Добавляем 2 потенциальных ответа ЛПР
+        var criteriaToValue1 = Map.of(
+            criteriaNames.get(0), values.get(0),
+            criteriaNames.get(2), values.get(2));
+        var criteriaToValue2 = Map.of(
+            criteriaNames.get(0), values.get(2),
+            criteriaNames.get(2), values.get(1));
+        var expertAlter1 = new AlternativeEntity("expertAlter1", criteriaToValue1);
+        var exportAlter2 = new AlternativeEntity("expertAlter2", criteriaToValue2);
+        dataContext.addP(new AlternativePair(expertAlter1, exportAlter2));
+
+        criteriaToValue1 = Map.of(
+            criteriaNames.get(1), values.get(2),
+            criteriaNames.get(2), values.get(0));
+        criteriaToValue2 = Map.of(
+            criteriaNames.get(1), values.get(1),
+            criteriaNames.get(2), values.get(1));
+        expertAlter1 = new AlternativeEntity("expertAlter1", criteriaToValue1);
+        exportAlter2 = new AlternativeEntity("expertAlter2", criteriaToValue2);
+        dataContext.addP(new AlternativePair(expertAlter1, exportAlter2));
+
+        return dataContext;
+    }
+
+    public DataContext createContext3() {
+        var dataContext = generateContext();
+
+        var criteriaToValue1 = Map.of(
+            criteriaNames.get(0), values.get(0),
+            criteriaNames.get(2), values.get(2));
+        var criteriaToValue2 = Map.of(
+            criteriaNames.get(0), values.get(2),
+            criteriaNames.get(2), values.get(1));
+        var expertAlter1 = new AlternativeEntity("expertAlter1", criteriaToValue1);
+        var exportAlter2 = new AlternativeEntity("expertAlter2", criteriaToValue2);
+        dataContext.addI(new AlternativePair(expertAlter1, exportAlter2));
+
+        criteriaToValue1 = Map.of(
+            criteriaNames.get(1), values.get(2),
+            criteriaNames.get(2), values.get(0));
+        criteriaToValue2 = Map.of(
+            criteriaNames.get(1), values.get(1),
+            criteriaNames.get(2), values.get(1));
+        expertAlter1 = new AlternativeEntity("expertAlter1", criteriaToValue1);
+        exportAlter2 = new AlternativeEntity("expertAlter2", criteriaToValue2);
+        dataContext.addI(new AlternativePair(expertAlter1, exportAlter2));
+
+        return dataContext;
     }
 }

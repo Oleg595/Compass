@@ -3,12 +3,16 @@ package com.example.algorithm.implementation.rule;
 import com.example.algorithm.context.DataContext;
 import com.example.algorithm.entity.AlternativeEntity;
 import com.example.algorithm.entity.AlternativePair;
+import com.example.algorithm.entity.Rule;
 import com.example.algorithm.utils.AlternativeUtils;
 import com.example.algorithm.utils.ValueCalculatorUtils;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +44,12 @@ class Limitation {
         this.coefs = toCopy.coefs.clone();
         this.value = toCopy.value;
         this.sign = toCopy.sign;
+    }
+
+    Limitation(int varSize, LimitationSign sign) {
+        this.coefs = new double[varSize];
+        this.value = .0;
+        this.sign = sign;
     }
 
     void mul(double val) {
@@ -95,7 +105,8 @@ class Limitation {
 }
 
 @AllArgsConstructor
-class SLAU {
+@Deprecated
+class SLAUV1 {
     List<Limitation> limits;
 
     int numRows() {
@@ -122,15 +133,14 @@ class SLAUAnswerFinder {
     private List<Limitation> limitations;
     private Map<Integer, Limitation> basisVarToLimitation;
 
-    private SLAUAnswerFinder() {
-    }
+    private SLAUAnswerFinder() {}
 
-    SLAUAnswerFinder(SLAU slau) {
-        varIsExpressed = new boolean[slau.numCols()];
+    SLAUAnswerFinder(SLAUV1 SLAUV1) {
+        varIsExpressed = new boolean[SLAUV1.numCols()];
         Arrays.fill(varIsExpressed, false);
         limitations = new ArrayList<>();
         basisVarToLimitation = new HashMap<>();
-        for (var limit : slau.limits) {
+        for (var limit : SLAUV1.limits) {
             var coefs = limit.coefs;
             if (Arrays.stream(coefs).anyMatch(it -> it != .0)) {
                 limitations.add(limit);
@@ -156,6 +166,9 @@ class SLAUAnswerFinder {
                 result.add(limitCopy);
             }
         }
+        var zeroLim = new Limitation(varIsExpressed.length, LimitationSign.GEQ);
+        zeroLim.coefs[index] = 1.0;
+        result.add(zeroLim);
         return result;
     }
 
@@ -165,12 +178,12 @@ class SLAUAnswerFinder {
             var subValue = limit.value - add.value;
             var subCoefs = limit.coefs.clone();
             for (var i = 0; i < subCoefs.length; ++i) {
-                subCoefs[i] -= add.coefs[i];
+                subCoefs[i] = add.coefs[i] - subCoefs[i];
             }
-            if (Arrays.stream(subCoefs).noneMatch(it -> it > .0) && subValue < .0) {
+            if (Arrays.stream(subCoefs).allMatch(it -> it < .0) && subValue < .0) {
                 return;
             }
-            if (Arrays.stream(subCoefs).noneMatch(it -> it < .0) && subValue > .0) {
+            if (Arrays.stream(subCoefs).allMatch(it -> it > .0) && subValue > .0) {
                 leqLimits.remove(limit);
             }
         }
@@ -183,12 +196,12 @@ class SLAUAnswerFinder {
             var subValue = limit.value - add.value;
             var subCoefs = limit.coefs.clone();
             for (var i = 0; i < subCoefs.length; ++i) {
-                subCoefs[i] -= add.coefs[i];
+                subCoefs[i] = add.coefs[i] - subCoefs[i];
             }
-            if (Arrays.stream(subCoefs).noneMatch(it -> it < .0) && subValue > .0) {
+            if (Arrays.stream(subCoefs).allMatch(it -> it > .0) && subValue > .0) {
                 return;
             }
-            if (Arrays.stream(subCoefs).noneMatch(it -> it > .0) && subValue < .0) {
+            if (Arrays.stream(subCoefs).allMatch(it -> it < .0) && subValue < .0) {
                 geqLimits.remove(limit);
             }
         }
@@ -207,6 +220,10 @@ class SLAUAnswerFinder {
     private void processLimitsForVar(int varIndex, List<Limitation> varLimits) {
         var leqLimits = new ArrayList<Limitation>();
         var geqLimits = new ArrayList<Limitation>();
+
+        var zeroLim = new Limitation(varIsExpressed.length, LimitationSign.GEQ);
+        zeroLim.coefs[varIndex] = 1.0;
+        geqLimits.add(zeroLim);
 
         for (var limit : varLimits) {
             limit.div(limit.coefs[varIndex]);
@@ -238,7 +255,7 @@ class SLAUAnswerFinder {
         for (var result : currentResults) {
             copyResults.remove(result);
             var min = 0;
-            var max = Integer.MAX_VALUE;
+            var max = Integer.MAX_VALUE; // опираться на размерность задачи
             for (var limit : varLimits) {
                 var sumVars = .0;
                 for (var index = 0; index < result.size(); ++index) {
@@ -336,8 +353,11 @@ class SLAUAnswerFinder {
     }
 }
 
-public class SolveSLAU {
-    private static SLAU generateSLAU(
+@Component
+@RequiredArgsConstructor
+@Deprecated
+public class SolveSLAUV1 {
+    private SLAUV1 generateSLAU(
         AlternativeEntity a, AlternativeEntity b, DataContext dataContext) {
         var D = ValueCalculatorUtils.calculateDMatrix(dataContext);
         var E = ValueCalculatorUtils.calculateEMatrix(dataContext);
@@ -358,55 +378,55 @@ public class SolveSLAU {
             var value = deltaAB.get(row);
             limitaions.add(new Limitation(coefs, value, LimitationSign.EQ));
         }
-        return new SLAU(limitaions);
+        return new SLAUV1(limitaions);
     }
 
-    private static void gaussDirectStepForRow(SLAU slau, int row) {
-        var col = slau.limits.get(row).findFirstNonZero();
+    private void gaussDirectStepForRow(SLAUV1 SLAUV1, int row) {
+        var col = SLAUV1.limits.get(row).findFirstNonZero();
         if (col == -1) {
             return;
         }
 
-        var coef = slau.getElement(row, col);
-        slau.limits.get(row).div(coef);
+        var coef = SLAUV1.getElement(row, col);
+        SLAUV1.limits.get(row).div(coef);
 
-        for (var r = row + 1; r < slau.numRows(); ++r) {
-            coef = slau.getElement(r, col);
+        for (var r = row + 1; r < SLAUV1.numRows(); ++r) {
+            coef = SLAUV1.getElement(r, col);
             if (coef == .0) continue;
-            var toSub = Limitation.mul(slau.limits.get(row), coef);
-            slau.limits.get(r).sub(toSub);
+            var toSub = Limitation.mul(SLAUV1.limits.get(row), coef);
+            SLAUV1.limits.get(r).sub(toSub);
         }
     }
 
-    private static void gaussReverseStepForRow(SLAU slau, int row) {
+    private void gaussReverseStepForRow(SLAUV1 SLAUV1, int row) {
         if (row == 0) {
             return;
         }
-        var col = slau.limits.get(row).findFirstNonZero();
+        var col = SLAUV1.limits.get(row).findFirstNonZero();
         if (col == -1) {
             return;
         }
 
         for (var r = row - 1; r >= 0; --r) {
-            var coef = slau.getElement(r, col);
+            var coef = SLAUV1.getElement(r, col);
             ;
             if (coef == .0) continue;
-            var toSub = Limitation.mul(slau.limits.get(row), coef);
-            slau.limits.get(r).sub(toSub);
+            var toSub = Limitation.mul(SLAUV1.limits.get(row), coef);
+            SLAUV1.limits.get(r).sub(toSub);
         }
     }
 
-    private static boolean isCorrectGaussSolution(SLAU slau) {
-        for (var row = 0; row < slau.numRows(); ++row) {
-            if (slau.limits.get(row).value == .0) continue;
+    private boolean isCorrectGaussSolution(SLAUV1 SLAUV1) {
+        for (var row = 0; row < SLAUV1.numRows(); ++row) {
+            if (SLAUV1.limits.get(row).value == .0) continue;
             var allZero = true;
             var allPos = true;
             var allNeg = true;
-            for (var col = 0; col < slau.numCols(); ++col) {
-                if (slau.getElement(row, col) > .0) {
+            for (var col = 0; col < SLAUV1.numCols(); ++col) {
+                if (SLAUV1.getElement(row, col) > .0) {
                     allNeg = false;
                     allZero = false;
-                } else if (slau.getElement(row, col) < .0) {
+                } else if (SLAUV1.getElement(row, col) < .0) {
                     allPos = false;
                     allZero = false;
                 } else {
@@ -414,38 +434,71 @@ public class SolveSLAU {
                     allPos = false;
                 }
             }
-            if (allZero || (allPos && slau.limits.get(row).value < 0.)
-                || (allNeg && slau.limits.get(row).value > 0.)) {
+            if (allZero || (allPos && SLAUV1.limits.get(row).value < 0.)
+                || (allNeg && SLAUV1.limits.get(row).value > 0.)) {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean gaussMethod(SLAU slau) {
+    private boolean gaussMethod(SLAUV1 SLAUV1) {
         // Прямой ход
-        for (var row = 0; row < slau.numRows(); ++row) {
-            gaussDirectStepForRow(slau, row);
+        for (var row = 0; row < SLAUV1.numRows(); ++row) {
+            gaussDirectStepForRow(SLAUV1, row);
         }
 
         // Обратный ход
-        for (var row = (int) (slau.numRows() - 1); row > 0; --row) {
-            gaussReverseStepForRow(slau, row);
+        for (var row = (int) (SLAUV1.numRows() - 1); row > 0; --row) {
+            gaussReverseStepForRow(SLAUV1, row);
         }
 
         // Проверка результата на валидность
-        return isCorrectGaussSolution(slau);
+        return isCorrectGaussSolution(SLAUV1);
+    }
+
+    private List<Rule> processAnswer(
+        List<Integer> answer, DataContext dataContext) {
+        var result = new ArrayList<Rule>();
+        var index = 0;
+        for (var pIndex = 0; pIndex < dataContext.getP().size(); ++pIndex) {
+            for (var i = 0; i < answer.get(pIndex); ++i) {
+                var rule = new Rule(dataContext.getP().get(pIndex));
+                result.add(rule);
+            }
+        }
+        index += dataContext.getP().size();
+        for (var iIndex = 0; iIndex < dataContext.getI().size(); ++iIndex) {
+            for (var i = 0; i < answer.get(iIndex + index); ++i) {
+                var rule = new Rule(dataContext.getI().get(iIndex));
+                result.add(rule);
+            }
+        }
+        index += dataContext.getI().size();
+        for (var iIndex = 0; iIndex < dataContext.getI().size(); ++iIndex) {
+            for (var i = 0; i < answer.get(iIndex + index); ++i) {
+                var rule = new Rule(dataContext.getI().get(iIndex));
+                var pair = new AlternativePair(rule.getPair().getSecond(), rule.getPair().getFirst());
+                rule.setPair(pair);
+                result.add(rule);
+            }
+        }
+        return result;
     }
 
     // Возвращается null, если решений нет
-    public static List<List<Integer>> generateAndSolve(
+    public List<List<Rule>> generateAndSolve(
         AlternativeEntity a, AlternativeEntity b, DataContext dataContext) {
         var slau = generateSLAU(a, b, dataContext);
         var correctGaussSolution = gaussMethod(slau);
         if (!correctGaussSolution) {
-            return null;
+            return Collections.emptyList();
         }
         var finder = new SLAUAnswerFinder(slau);
-        return finder.findAnswers();
+        var result = new ArrayList<List<Rule>>();
+        for (var answer : finder.findAnswers()) {
+            result.add(processAnswer(answer, dataContext));
+        }
+        return result;
     }
 }
