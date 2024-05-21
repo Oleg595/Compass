@@ -1,8 +1,8 @@
 package com.example.algorithm.utils;
 
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.CriteriaEntity;
 import org.ejml.data.DMatrixRMaj;
+import org.example.CriteriaEntity;
+import org.example.DataContext;
 
 import java.util.List;
 

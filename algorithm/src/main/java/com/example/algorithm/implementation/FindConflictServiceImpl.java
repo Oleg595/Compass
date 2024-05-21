@@ -1,14 +1,14 @@
 package com.example.algorithm.implementation;
 
 import com.example.algorithm.common.FindConflictService;
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
-import com.example.algorithm.entity.Rule;
-import com.example.algorithm.entity.RuleSet;
 import com.example.algorithm.implementation.rule.RuleService;
-import com.example.algorithm.implementation.rule.SolveSLAUV1;
+import com.example.algorithm.implementation.rule.SolveSLAU;
 import lombok.AllArgsConstructor;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
+import org.example.DataContext;
+import org.example.RuleEntity;
+import org.example.RuleSet;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class FindConflictServiceImpl implements FindConflictService {
     private final RuleService ruleService;
-    private final SolveSLAUV1 solveSLAU;
+    private final SolveSLAU solveSLAU;
 
-    private List<Rule> getPrepareRules(List<Rule> rules) {
-        var result = new ArrayList<Rule>();
+    private List<RuleEntity> getPrepareRules(List<RuleEntity> rules) {
+        var result = new ArrayList<RuleEntity>();
         for (var rule : rules) {
             if (rule.getSet() == RuleSet.PREPARE) {
                 result.add(rule);
@@ -32,9 +32,9 @@ public class FindConflictServiceImpl implements FindConflictService {
     }
 
     @Override
-    public List<Rule> findConflictChainOrNull(DataContext dataContext) {
-        var alt = new AlternativeEntity("Zero alt", Map.of());
-        var startTime = System.currentTimeMillis();
+    public List<RuleEntity> findConflictChainOrNull(DataContext dataContext) {
+        var alt = new AlternativeEntity(0, "Zero alt", Map.of());
+//        var startTime = System.currentTimeMillis();
 //        var solver = SolveSLAUV2.generateTask(alt, alt, dataContext);
 //        var rules = solver.getNextSolutionOrNull();
 //        if (rules != null) {
@@ -47,22 +47,18 @@ public class FindConflictServiceImpl implements FindConflictService {
 //            }
 //        }
         var answers = solveSLAU.generateAndSolve(alt, alt, dataContext);
-        System.out.println("Время решения СЛАУ: " + (System.currentTimeMillis() - startTime) + " миллисекунд");
-        startTime = System.currentTimeMillis();
         for (var rules : answers) {
             for (var prepareRule : getPrepareRules(rules)) {
                 var prepareAlt = prepareRule.getPair().getFirst();
-                var conflictRule = new Rule(
+                var conflictRule = new RuleEntity(
                     new AlternativePair(prepareAlt, prepareAlt), RuleSet.PREPARE);
                 var chain = ruleService.generateLogicalChainOrNull(conflictRule, dataContext);
                 if (chain != null) {
-                    System.out.println("Время поиска цепи: " + (System.currentTimeMillis() - startTime) + " " +
-                        "миллисекунд");
                     return chain;
                 }
             }
+
         }
-        System.out.println("Время поиска цепи: " + (System.currentTimeMillis() - startTime) + " миллисекунд");
         return null;
     }
 }

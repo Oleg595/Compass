@@ -1,10 +1,10 @@
 package com.example.console.service;
 
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
-import com.example.algorithm.entity.Rule;
 import lombok.AllArgsConstructor;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
+import org.example.DataContext;
+import org.example.RuleEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,7 +75,7 @@ public class UserInteractionService {
         processAnswer(reader.nextInt(), pair);
     }
 
-    public void solveConflict(List<Rule> conflictRules) {
+    public void solveConflict(List<RuleEntity> conflictRules) {
         var reader = new Scanner(System.in);
         System.out.println("В ответах найдено противоречие:");
         for (var index = 0; index < conflictRules.size(); ++index) {

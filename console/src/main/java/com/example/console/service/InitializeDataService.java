@@ -1,8 +1,5 @@
 package com.example.console.service;
 
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.CriteriaEntity;
 import com.example.algorithm.entity.ReadCriteriaEntity;
 import com.example.algorithm.utils.AlternativeUtils;
 import com.google.gson.Gson;
@@ -10,6 +7,9 @@ import com.google.gson.JsonSyntaxException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.core.util.IOUtils;
+import org.example.AlternativeEntity;
+import org.example.CriteriaEntity;
+import org.example.DataContext;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -102,7 +102,7 @@ public class InitializeDataService {
         final String priorFieldName = "priority";
         for (var readCriteria : readCriterias) {
             var values = getSortValues(readCriteria);
-            var criteria = new CriteriaEntity(readCriteria.getName(), values);
+            var criteria = new CriteriaEntity(readCriteria.getName(), new HashSet<>(values), new HashMap<>());
             dataContext.addCriteria(criteria);
         }
         for (var readCriteria: readCriterias) {

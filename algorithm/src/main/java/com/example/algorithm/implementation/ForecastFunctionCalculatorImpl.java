@@ -1,19 +1,19 @@
 package com.example.algorithm.implementation;
 
 import com.example.algorithm.common.ForecastFunctionCalculator;
-import com.example.algorithm.context.DataContext;
 import com.example.algorithm.entity.ForecastFunctionEntity;
 import com.example.algorithm.utils.ValueCalculatorUtils;
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
 import org.ejml.dense.row.CommonOps_DDRM;
+import org.example.DataContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-class ForecastFunctionCalculatorImpl implements ForecastFunctionCalculator {
+public class ForecastFunctionCalculatorImpl implements ForecastFunctionCalculator {
 
     private DataContext dataContext;
 

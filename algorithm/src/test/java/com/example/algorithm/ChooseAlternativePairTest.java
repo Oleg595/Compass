@@ -3,10 +3,10 @@ package com.example.algorithm;
 import com.example.algorithm.common.ChooseAlternativePairService;
 import com.example.algorithm.common.ForecastFunctionCalculator;
 import com.example.algorithm.configurator.AlgorithmConfigurator;
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativeEntity;
 import com.example.algorithm.factory.ContextFactory;
 import lpsolve.LpSolveException;
+import org.example.AlternativeEntity;
+import org.example.DataContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,11 +77,11 @@ public class ChooseAlternativePairTest {
             criteriaNames.get(2), values.get(1)
         );
 
-        var alt1 = new AlternativeEntity("Alt1", criteriaToValue1);
-        var alt2 = new AlternativeEntity("Alt2", criteriaToValue2);
-        var alt3 = new AlternativeEntity("Alt3", criteriaToValue3);
-        var alt4 = new AlternativeEntity("Alt4", criteriaToValue4);
-        var alt5 = new AlternativeEntity("Alt5", criteriaToValue5);
+        var alt1 = new AlternativeEntity(1, "Alt1", criteriaToValue1);
+        var alt2 = new AlternativeEntity(2, "Alt2", criteriaToValue2);
+        var alt3 = new AlternativeEntity(3, "Alt3", criteriaToValue3);
+        var alt4 = new AlternativeEntity(4, "Alt4", criteriaToValue4);
+        var alt5 = new AlternativeEntity(5, "Alt5", criteriaToValue5);
 
         dataContext.setAlts(List.of(alt1, alt2, alt3, alt4, alt5));
 
@@ -116,9 +116,9 @@ public class ChooseAlternativePairTest {
             criteriaNames.get(2), values.get(1)
         );
 
-        var alt1 = new AlternativeEntity("Alt1", criteriaToValue1);
-        var alt2 = new AlternativeEntity("Alt2", criteriaToValue2);
-        var alt3 = new AlternativeEntity("Alt3", criteriaToValue3);
+        var alt1 = new AlternativeEntity(1, "Alt1", criteriaToValue1);
+        var alt2 = new AlternativeEntity(2, "Alt2", criteriaToValue2);
+        var alt3 = new AlternativeEntity(3, "Alt3", criteriaToValue3);
 
         dataContext.setAlts(List.of(alt1, alt2, alt3));
 
@@ -156,9 +156,9 @@ public class ChooseAlternativePairTest {
             criteriaNames.get(2), values.get(1)
         );
 
-        var alt1 = new AlternativeEntity("Alt1", criteriaToValue1);
-        var alt2 = new AlternativeEntity("Alt2", criteriaToValue2);
-        var alt3 = new AlternativeEntity("Alt3", criteriaToValue3);
+        var alt1 = new AlternativeEntity(1, "Alt1", criteriaToValue1);
+        var alt2 = new AlternativeEntity(2, "Alt2", criteriaToValue2);
+        var alt3 = new AlternativeEntity(3, "Alt3", criteriaToValue3);
 
         dataContext.setAlts(List.of(alt1, alt2, alt3));
 

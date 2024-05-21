@@ -2,9 +2,9 @@ package com.example.algorithm;
 
 import com.example.algorithm.common.FindConflictService;
 import com.example.algorithm.configurator.AlgorithmConfigurator;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
 import com.example.algorithm.factory.ContextFactory;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,8 +36,8 @@ public class FindConflictTest {
             criteriaNames.get(0), values.get(1),
             criteriaNames.get(1), values.get(0)
         );
-        var estimationA1 = new AlternativeEntity("EstimationA1", criteriaToValueA1);
-        var estimationB1 = new AlternativeEntity("EstimationB1", criteriaToValueB1);
+        var estimationA1 = new AlternativeEntity(-1, "EstimationA1", criteriaToValueA1);
+        var estimationB1 = new AlternativeEntity(-1, "EstimationB1", criteriaToValueB1);
         dataContext.addP(new AlternativePair(estimationA1, estimationB1));
 
         var criteriaToValueA2 = Map.of(
@@ -48,8 +48,8 @@ public class FindConflictTest {
             criteriaNames.get(0), values.get(2),
             criteriaNames.get(1), values.get(0)
         );
-        var estimationA2 = new AlternativeEntity("EstimationA2", criteriaToValueA2);
-        var estimationB2 = new AlternativeEntity("EstimationB2", criteriaToValueB2);
+        var estimationA2 = new AlternativeEntity(-1, "EstimationA2", criteriaToValueA2);
+        var estimationB2 = new AlternativeEntity(-1, "EstimationB2", criteriaToValueB2);
         dataContext.addI(new AlternativePair(estimationA2, estimationB2));
 
         var chain = fcService.findConflictChainOrNull(dataContext);

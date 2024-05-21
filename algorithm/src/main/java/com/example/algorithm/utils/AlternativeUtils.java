@@ -1,8 +1,8 @@
 package com.example.algorithm.utils;
 
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
-import com.example.algorithm.entity.CriteriaEntity;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
+import org.example.CriteriaEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,21 +22,21 @@ public class AlternativeUtils {
             String value = null;
             for (var index = 0; index < criteria.getValues().size(); ++index) {
                 if (delta.get(index + count) > 0.0) {
-                    value = criteria.getValues().get(index);
+                    value = criteria.getValues().toArray()[index].toString();
                 }
             }
             criteriaToValue.put(criteria.getName(), value);
             count += criteria.getValues().size();
         }
-        return new AlternativeEntity(generateName(), criteriaToValue);
+        return new AlternativeEntity(-1, generateName(), criteriaToValue);
     }
 
     public static AlternativePair calculateAlternativePair(
         List<CriteriaEntity> allCriterias, List<CriteriaEntity> valCrts,
         List<String> val1, List<String> val2) {
         assert valCrts.size() == val1.size() && valCrts.size() == val2.size();
-        var alt1 = new AlternativeEntity(generateName(), new HashMap<>());
-        var alt2 = new AlternativeEntity(generateName(), new HashMap<>());
+        var alt1 = new AlternativeEntity(-1, generateName(), new HashMap<>());
+        var alt2 = new AlternativeEntity(-1, generateName(), new HashMap<>());
         for (var criteria : allCriterias) {
             if (valCrts.contains(criteria)) {
                 var index = valCrts.indexOf(criteria);
@@ -83,11 +83,5 @@ public class AlternativeUtils {
             count += values.size();
         }
         return result;
-    }
-
-    public static List<Double> calculateDelta(
-        AlternativeEntity first, AlternativeEntity second, List<CriteriaEntity> criterias) {
-        var pair = new AlternativePair(first, second);
-        return calculateDelta(pair, criterias);
     }
 }

@@ -1,8 +1,8 @@
 package com.example.algorithm.common;
 
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativePair;
 import lpsolve.LpSolveException;
+import org.example.AlternativePair;
+import org.example.DataContext;
 
 import java.util.List;
 

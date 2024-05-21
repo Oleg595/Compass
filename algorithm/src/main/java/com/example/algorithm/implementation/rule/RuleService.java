@@ -1,11 +1,11 @@
 package com.example.algorithm.implementation.rule;
 
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
-import com.example.algorithm.entity.Rule;
-import com.example.algorithm.entity.RuleSet;
 import lombok.AllArgsConstructor;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
+import org.example.DataContext;
+import org.example.RuleEntity;
+import org.example.RuleSet;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class RuleService {
-    private final SolveSLAUV1 solver;
+    private final SolveSLAU solver;
 
     private boolean canBeNextState(
         AlternativeEntity currentState, AlternativeEntity nextState) {
@@ -43,8 +43,8 @@ public class RuleService {
         return result;
     }
 
-    private List<Rule> generateChain(
-        AlternativeEntity currentState, AlternativeEntity endState, List<Rule> rules) {
+    private List<RuleEntity> generateChain(
+        AlternativeEntity currentState, AlternativeEntity endState, List<RuleEntity> rules) {
         if (endState.isEqual(currentState) && rules.isEmpty()) {
             return new ArrayList<>();
         }
@@ -64,7 +64,7 @@ public class RuleService {
         return null;
     }
 
-    private boolean checkChain(List<Rule> chain, Rule rule) {
+    private boolean checkChain(List<RuleEntity> chain, RuleEntity rule) {
         if (rule.getSet() == RuleSet.PREPARE) {
             for (var r : chain) {
                 if (r.getSet() == RuleSet.PREPARE) {
@@ -82,7 +82,7 @@ public class RuleService {
         }
     }
 
-    private Rule generateRule(AlternativeEntity state, Rule rule, Set<String> criteriaNames) {
+    private RuleEntity generateRule(AlternativeEntity state, RuleEntity rule, Set<String> criteriaNames) {
         var first = rule.getPair().getFirst();
         var second = rule.getPair().getSecond();
         for (var name : criteriaNames) {
@@ -90,18 +90,18 @@ public class RuleService {
                 var stateValue = state.getCriteriaToValue().get(name);
                 var firstMap = new HashMap<>(first.getCriteriaToValue());
                 var secondMap = new HashMap<>(second.getCriteriaToValue());
-                first = new AlternativeEntity(first.getName(), firstMap);
-                second = new AlternativeEntity(second.getName(), secondMap);
+                first = new AlternativeEntity(first.getId(), first.getName(), firstMap);
+                second = new AlternativeEntity(second.getId(), second.getName(), secondMap);
                 first.getCriteriaToValue().put(name, stateValue);
                 second.getCriteriaToValue().put(name, stateValue);
             }
         }
-        return new Rule(new AlternativePair(first, second), rule.getSet());
+        return new RuleEntity(new AlternativePair(first, second), rule.getSet());
     }
 
     private void printChain(
         AlternativeEntity startState, AlternativeEntity endState,
-        List<Rule> chain, DataContext dataContext) {
+        List<RuleEntity> chain, DataContext dataContext) {
         var criteriaNames = dataContext.getCriteriaNames();
         System.out.println("Цепочка вывода утверждения:");
         System.out.println(startState.toString(criteriaNames) + " -> ");
@@ -117,22 +117,21 @@ public class RuleService {
             currentState = rule.getPair().getSecond();
         }
         var sumRuleSet = (prior) ? RuleSet.PREPARE : RuleSet.EQUAL;
-        var sumRule = new Rule(new AlternativePair(startState, endState), sumRuleSet);
+        var sumRule = new RuleEntity(new AlternativePair(startState, endState), sumRuleSet);
         System.out.println(sumRule.toString(criteriaNames));
     }
 
-    private List<Rule> generateChainFromRulesOrNull(List<Rule> rules, Rule rule, DataContext dataContext) {
+    private List<RuleEntity> generateChainFromRulesOrNull(List<RuleEntity> rules, RuleEntity rule, DataContext dataContext) {
         var startState = rule.getPair().getFirst();
         var endState = rule.getPair().getSecond();
         var chain = generateChain(startState, endState, rules);
         if (chain == null || !checkChain(chain, rule)) {
             return null;
         }
-//        printChain(startState, endState, chain, dataContext);
         return chain;
     }
 
-    public List<Rule> generateLogicalChainOrNull(Rule rule, DataContext dataContext) {
+    public List<RuleEntity> generateLogicalChainOrNull(RuleEntity rule, DataContext dataContext) {
         var answers = solver.generateAndSolve(
             rule.getPair().getFirst(), rule.getPair().getSecond(), dataContext);
         for (var rules : answers) {
@@ -141,19 +140,10 @@ public class RuleService {
                 return chain;
             }
         }
-//        var solver = SolveSLAUV2.generateTask(rule.getPair().getFirst(), rule.getPair().getSecond(), dataContext);
-//        var rules = solver.getNextSolutionOrNull();
-//        while (rules != null) {
-//            var chain = generateChainFromRulesOrNull(rules, rule, dataContext);
-//            if (chain != null) {
-//                return chain;
-//            }
-//            rules = solver.getNextSolutionOrNull();
-//        }
         return null;
     }
 
-    public boolean checkRule(Rule rule, DataContext dataContext) {
+    public boolean checkRule(RuleEntity rule, DataContext dataContext) {
         return generateLogicalChainOrNull(rule, dataContext) != null;
     }
 }

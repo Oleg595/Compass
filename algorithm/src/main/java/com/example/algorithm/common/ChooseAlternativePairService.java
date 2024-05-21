@@ -1,8 +1,8 @@
 package com.example.algorithm.common;
 
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativePair;
 import com.example.algorithm.entity.ForecastFunctionEntity;
+import org.example.AlternativePair;
+import org.example.DataContext;
 
 public interface ChooseAlternativePairService {
     // Возвращает пару несравнимых альтернатив, если такой найти не удалось,

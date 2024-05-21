@@ -3,10 +3,10 @@ package com.example.algorithm;
 import com.example.algorithm.common.CompareAlternativesCalculator;
 import com.example.algorithm.common.ForecastFunctionCalculator;
 import com.example.algorithm.configurator.AlgorithmConfigurator;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
 import com.example.algorithm.factory.ContextFactory;
 import lpsolve.LpSolveException;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,20 +62,20 @@ public class CompareAlternativesCalculatorTest {
             criteriaNames.get(1), values.get(1),
             criteriaNames.get(2), values.get(1)
         );
-        var A = new AlternativeEntity("A", criteriaToValueA);
-        var B = new AlternativeEntity("B", criteriaToValueB);
+        var A = new AlternativeEntity(-1, "A", criteriaToValueA);
+        var B = new AlternativeEntity(-1, "B", criteriaToValueB);
         var pair = new AlternativePair(A, B);
 
         var fFunction = ffCalculator.calculateForecastFunction(dataContext);
         var result = caCalculator.getResultVector(2, fFunction.getV(), pair, dataContext);
 
-        var expectedA = new AlternativeEntity(
+        var expectedA = new AlternativeEntity(-1,
             "expectedA", Map.of(
             criteriaNames.get(0), values.get(0),
             criteriaNames.get(1), values.get(2)
         ));
         var expectedB = new AlternativeEntity(
-            "expectedB", Map.of(
+            -1, "expectedB", Map.of(
             criteriaNames.get(0), values.get(1),
             criteriaNames.get(1), values.get(1)
         ));
@@ -100,20 +100,20 @@ public class CompareAlternativesCalculatorTest {
             criteriaNames.get(1), values.get(0),
             criteriaNames.get(2), values.get(0)
         );
-        var A = new AlternativeEntity("A", criteriaToValueA);
-        var B = new AlternativeEntity("B", criteriaToValueB);
+        var A = new AlternativeEntity(-1, "A", criteriaToValueA);
+        var B = new AlternativeEntity(-1, "B", criteriaToValueB);
         var pair = new AlternativePair(A, B);
 
         var fFunction = ffCalculator.calculateForecastFunction(dataContext);
         var result = caCalculator.getResultVector(2, fFunction.getV(), pair, dataContext);
 
         var expectedA = new AlternativeEntity(
-            "expectedA", Map.of(
+            -1, "expectedA", Map.of(
             criteriaNames.get(0), values.get(0),
             criteriaNames.get(1), values.get(2)
         ));
         var expectedB = new AlternativeEntity(
-            "expectedB", Map.of(
+            -1, "expectedB", Map.of(
             criteriaNames.get(0), values.get(1),
             criteriaNames.get(1), values.get(0)
         ));

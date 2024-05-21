@@ -1,25 +1,31 @@
 package com.example.algorithm.implementation;
 
 import com.example.algorithm.common.CompareAlternativesCalculator;
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativePair;
+import com.example.algorithm.implementation.rule.RuleService;
 import com.example.algorithm.utils.AlternativeUtils;
 import com.example.algorithm.utils.ValueCalculatorUtils;
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
+import org.example.DataContext;
+import org.example.RuleEntity;
+import org.example.RuleSet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // Перепроверить ограничения
 @Component
-class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator {
+public class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator {
     private DataContext dataContext;
     private int k;
     private List<Double> v;
     private List<Double> delta;
+    @Autowired
+    private RuleService ruleService;
 
     private int getT() {
         return dataContext.getCriterias().size() - k + 1;
@@ -130,21 +136,6 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
             solver.addConstraint(constraint1, LpSolve.EQ, 0.0);
             solver.addConstraint(constraint2, LpSolve.LE, 1.0);
         }
-//        for (var rNum = 0; rNum < getT(); ++rNum) {
-//            var count = 0;
-//            for (var criteria : dataContext.getCriterias()) {
-//                var constraint1 = new double[1 + getDim()];
-//                var constraint2 = new double[1 + getDim()];
-//                for (var col = 0; col < criteria.getValues().size(); ++col) {
-//                    constraint1[1 + 2 * (rNum * M + col) + count] = 1.0;
-//                    constraint1[1 + 2 * (rNum * M + col) + count + 1] = -1.0;
-//                    constraint2[1 + 2 * (rNum * M + col) + count] = 1.0;
-//                }
-//                count += 2 * criteria.getValues().size();
-//                solver.addConstraint(constraint1, LpSolve.EQ, 0.0);
-//                solver.addConstraint(constraint2, LpSolve.LE, 1.0);
-//            }
-//        }
     }
 
     private void addConstraints9(LpSolve solver) throws LpSolveException {
@@ -154,13 +145,6 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
             constraint[1 + 2 * col] = 1.0;
         }
         solver.addConstraint(constraint, LpSolve.LE, k);
-//        for (var rNum = 0; rNum < getT(); ++rNum) {
-//            var constraint = new double[1 + getDim()];
-//            for (var col = rNum * M; col < (rNum + 1) * M; ++col) {
-//                constraint[1 + 2 * col] = 1.0;
-//            }
-//            solver.addConstraint(constraint, LpSolve.LE, k);
-//        }
     }
 
     private void addCustomConstraints(LpSolve solver) throws LpSolveException {
@@ -203,6 +187,15 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
         return solver;
     }
 
+    private boolean comparableAlternatives(AlternativeEntity alt1, AlternativeEntity alt2) {
+        var rule1 = new RuleEntity(new AlternativePair(alt1, alt2), RuleSet.PREPARE);
+        var rule2 = new RuleEntity(new AlternativePair(alt2, alt1), RuleSet.PREPARE);
+        var rule3 = new RuleEntity(new AlternativePair(alt1, alt2), RuleSet.EQUAL);
+        return ruleService.checkRule(rule1, dataContext)
+            || ruleService.checkRule(rule2, dataContext)
+            || ruleService.checkRule(rule3, dataContext);
+    }
+
     private List<AlternativePair> extractAlternatives(double[] data) {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
         var result = new ArrayList<AlternativePair>();
@@ -215,29 +208,14 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
         if (delta1.stream().anyMatch(it -> it != 0.0) && delta2.stream().anyMatch(it -> it != 0.0)) {
             var alt1 = AlternativeUtils.createByDelta(delta1, dataContext.getCriterias());
             var alt2 = AlternativeUtils.createByDelta(delta2, dataContext.getCriterias());
-            result.add(new AlternativePair(alt1, alt2));
+            var pair = new AlternativePair(alt1, alt2);
+            var inP = dataContext.getP().stream().anyMatch(it -> it.getPair().isEqual(pair));
+            var inI = dataContext.getI().stream().anyMatch(it -> it.getPair().isEqual(pair));
+            if (!inP && !inI && !comparableAlternatives(alt1, alt2)) {
+                result.add(pair);
+            }
         }
         return result;
-//        for (var index = 0; index < getT(); ++index) {
-//            var delta1 = new ArrayList<Double>();
-//            var delta2 = new ArrayList<Double>();
-//            for (var col = index * M; col < (index + 1) * M; ++col) {
-//                delta1.add(data[2 * col]);
-//                delta2.add(data[2 * col + 1]);
-//            }
-//            if (delta1.stream().anyMatch(it -> it != 0.0) && delta2.stream().anyMatch(it -> it != 0.0)) {
-//                var alt1 = AlternativeUtils.createByDelta(delta1, dataContext.getCriterias());
-//                var alt2 = AlternativeUtils.createByDelta(delta2, dataContext.getCriterias());
-//                result.add(new AlternativePair(alt1, alt2));
-//            }
-//        }
-//        return result;
-    }
-
-    private void printConstraints(LpSolve solver) throws LpSolveException {
-        for (var index = 0; index < solver.getNrows(); ++index) {
-            System.out.println(Arrays.toString(solver.getPtrRow(index)));
-        }
     }
 
     @Override
@@ -251,7 +229,6 @@ class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator
 
         var solver = createSolver();
         solver.solve();
-//        printConstraints(solver);
         return extractAlternatives(solver.getPtrVariables());
     }
 }

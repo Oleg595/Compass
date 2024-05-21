@@ -1,15 +1,16 @@
 package com.example.algorithm.implementation;
 
 import com.example.algorithm.common.ChooseAlternativePairService;
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
 import com.example.algorithm.entity.ForecastFunctionEntity;
-import com.example.algorithm.entity.Rule;
-import com.example.algorithm.entity.RuleSet;
 import com.example.algorithm.implementation.rule.RuleService;
 import com.example.algorithm.utils.AlternativeUtils;
 import lombok.AllArgsConstructor;
+import org.example.AlternativeComparsionEntity;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
+import org.example.DataContext;
+import org.example.RuleEntity;
+import org.example.RuleSet;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,13 +24,16 @@ public class ChooseAlternativePairServiceImpl implements ChooseAlternativePairSe
     private List<AlternativeEntity> generateBSet(DataContext dataContext) {
         var A = new ArrayList<>(dataContext.getAlts());
         var B = new ArrayList<AlternativeEntity>();
-        for (var alt : dataContext.getAlts()) {
+        for (var alt : dataContext.getNonPriorAlts()) {
             var havePrior = false;
             for (var aAlt : A) {
                 if (aAlt != alt) {
-                    var rule = new Rule(new AlternativePair(aAlt, alt), RuleSet.PREPARE);
-                    if (crService.checkRule(rule, dataContext)) {
+                    var rule = new RuleEntity(new AlternativePair(aAlt, alt), RuleSet.PREPARE);
+                    var comparsionRules = crService.generateLogicalChainOrNull(rule, dataContext);
+                    if (comparsionRules != null) {
                         havePrior = true;
+                        dataContext.getAltsComparsion()
+                            .add(new AlternativeComparsionEntity(rule, comparsionRules));
                         break;
                     }
                 }
@@ -66,9 +70,13 @@ public class ChooseAlternativePairServiceImpl implements ChooseAlternativePairSe
         B.remove(first);
         while (!B.isEmpty()) {
             var second = findMorePrior(B, fFunction, dataContext);
-            var rule = new Rule(new AlternativePair(first, second), RuleSet.EQUAL);
-            if (!crService.checkRule(rule, dataContext)) {
+            var rule = new RuleEntity(new AlternativePair(first, second), RuleSet.EQUAL);
+            var comparsionRules = crService.generateLogicalChainOrNull(rule, dataContext);
+            if (comparsionRules == null) {
                 return new AlternativePair(first, second);
+            } else {
+                dataContext.getAltsComparsion()
+                    .add(new AlternativeComparsionEntity(rule, comparsionRules));
             }
             B.remove(second);
         }

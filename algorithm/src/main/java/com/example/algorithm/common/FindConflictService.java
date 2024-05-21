@@ -1,10 +1,10 @@
 package com.example.algorithm.common;
 
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.Rule;
+import org.example.DataContext;
+import org.example.RuleEntity;
 
 import java.util.List;
 
 public interface FindConflictService {
-    List<Rule> findConflictChainOrNull(DataContext dataContext);
+    List<RuleEntity> findConflictChainOrNull(DataContext dataContext);
 }

@@ -1,10 +1,9 @@
 package com.example.console.service;
 
 import com.example.algorithm.AlgorithmAPI;
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativePair;
 import lombok.AllArgsConstructor;
 import lpsolve.LpSolveException;
+import org.example.DataContext;
 import org.springframework.stereotype.Component;
 
 import static java.lang.System.exit;
@@ -16,17 +15,14 @@ public class AlgorithmService {
     private final AlgorithmAPI algorithmAPI;
     private final UserInteractionService cvService;
 
-    private boolean isAnswer(AlternativePair pair) {
-        return pair.getFirst().isEqual(pair.getSecond());
+    private boolean hasAnswer() {
+        return dataContext.getNonPriorAlts().size() == 1;
     }
 
     public void runAlgorithm() throws LpSolveException {
-        var fFunciton = algorithmAPI.calculateForecastFunction(dataContext);
-        var comparePair = algorithmAPI.findNonComparablePriorPair(fFunciton, dataContext);
         var k = 2;
-        while (!isAnswer(comparePair)) {
-            var compareAlts = algorithmAPI.calculateCompareAlternatives(
-                k, fFunciton.getV(), comparePair, dataContext);
+        var compareAlts = algorithmAPI.calculateCompareAlternatives(dataContext, k);
+        while (!hasAnswer()) {
             if (compareAlts.isEmpty()) {
                 if (k < dataContext.getCriterias().size()) {
                     ++k;
@@ -42,11 +38,10 @@ public class AlgorithmService {
                     conflict = algorithmAPI.findConflictChainOrNull(dataContext);
                 }
             }
-            fFunciton = algorithmAPI.calculateForecastFunction(dataContext);
-            comparePair = algorithmAPI.findNonComparablePriorPair(fFunciton, dataContext);
+            compareAlts = algorithmAPI.calculateCompareAlternatives(dataContext, k);
         }
-        var bestAlt = comparePair.getFirst();
+        var bestAlt = dataContext.getNonPriorAlts().get(0);
         System.out.println(
-            "Наилучшая альтернатива: " + bestAlt.toString(dataContext.getCriteriaNames()));
+            "Наилучшая альтернатива: " + bestAlt.toStringWithName(dataContext.getCriteriaNames()));
     }
 }

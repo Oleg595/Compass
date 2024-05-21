@@ -1,13 +1,13 @@
 package com.example.algorithm;
 
 import com.example.algorithm.configurator.AlgorithmConfigurator;
-import com.example.algorithm.context.DataContext;
-import com.example.algorithm.entity.AlternativeEntity;
-import com.example.algorithm.entity.AlternativePair;
-import com.example.algorithm.entity.Rule;
-import com.example.algorithm.entity.RuleSet;
 import com.example.algorithm.factory.ContextFactory;
 import com.example.algorithm.implementation.rule.RuleService;
+import org.example.AlternativeEntity;
+import org.example.AlternativePair;
+import org.example.DataContext;
+import org.example.RuleEntity;
+import org.example.RuleSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ public class CheckRuleTest {
     private ContextFactory contextFactory;
 
     // Вывод списка правил
-    private void prettyOutRules(List<Rule> rules, DataContext dataContext) {
+    private void prettyOutRules(List<RuleEntity> rules, DataContext dataContext) {
         var criteriaNames = new HashSet<String>();
         for (var criteria : dataContext.getCriterias()) {
             criteriaNames.add(criteria.getName());
@@ -40,7 +40,7 @@ public class CheckRuleTest {
         }
     }
 
-    private void printTask(Rule ruleToCheck, DataContext dataContext) {
+    private void printTask(RuleEntity ruleToCheck, DataContext dataContext) {
         System.out.println("Множество пар, удовлетворяющих предикату P (прочерк = \\omega):");
         prettyOutRules(dataContext.getP(), dataContext);
         System.out.println("Множество пар, удовлетворяющих предикату I:");
@@ -55,21 +55,21 @@ public class CheckRuleTest {
         var criteriaNames = ContextFactory.getCriteriaNames();
         var values = ContextFactory.getCriteriaValues();
 
-        // Создаём альтернативы A,B:
+        // Создаём альтернативы A, B:
         var criteriaToValueA = Map.of(
             criteriaNames.get(0), values.get(0),
             criteriaNames.get(1), values.get(0),
             criteriaNames.get(2), values.get(1)
         );
-        var A = new AlternativeEntity("A", criteriaToValueA);
+        var A = new AlternativeEntity(-1, "A", criteriaToValueA);
         var criteriaToValueB = Map.of(
             criteriaNames.get(0), values.get(1),
             criteriaNames.get(1), values.get(1),
             criteriaNames.get(2), values.get(0)
         );
-        var B = new AlternativeEntity("B", criteriaToValueB);
+        var B = new AlternativeEntity(-1, "B", criteriaToValueB);
 
-        var rule = new Rule(new AlternativePair(A, B), RuleSet.PREPARE);
+        var rule = new RuleEntity(new AlternativePair(A, B), RuleSet.PREPARE);
         printTask(rule, dataContext);
 
         Assertions.assertTrue(crService.checkRule(rule, dataContext));
@@ -81,21 +81,21 @@ public class CheckRuleTest {
         var criteriaNames = ContextFactory.getCriteriaNames();
         var values = ContextFactory.getCriteriaValues();
 
-        // Создаём альтернативы A,B:
+        // Создаём альтернативы A, B:
         var criteriaToValueA = Map.of(
             criteriaNames.get(0), values.get(0),
             criteriaNames.get(1), values.get(2),
             criteriaNames.get(2), values.get(0)
         );
-        var A = new AlternativeEntity("A", criteriaToValueA);
+        var A = new AlternativeEntity(-1, "A", criteriaToValueA);
         var criteriaToValueB = Map.of(
             criteriaNames.get(0), values.get(2),
             criteriaNames.get(1), values.get(1),
             criteriaNames.get(2), values.get(1)
         );
-        var B = new AlternativeEntity("B", criteriaToValueB);
+        var B = new AlternativeEntity(-1, "B", criteriaToValueB);
 
-        var rule = new Rule(new AlternativePair(A, B), RuleSet.PREPARE);
+        var rule = new RuleEntity(new AlternativePair(A, B), RuleSet.PREPARE);
         printTask(rule, dataContext);
 
         Assertions.assertTrue(crService.checkRule(rule, dataContext));
@@ -107,21 +107,21 @@ public class CheckRuleTest {
         var criteriaNames = ContextFactory.getCriteriaNames();
         var values = ContextFactory.getCriteriaValues();
 
-        // Создаём альтернативы A,B:
+        // Создаём альтернативы A, B:
         var criteriaToValueA = Map.of(
             criteriaNames.get(0), values.get(0),
             criteriaNames.get(1), values.get(2),
             criteriaNames.get(2), values.get(0)
         );
-        var A = new AlternativeEntity("A", criteriaToValueA);
+        var A = new AlternativeEntity(-1, "A", criteriaToValueA);
         var criteriaToValueB = Map.of(
             criteriaNames.get(0), values.get(2),
             criteriaNames.get(1), values.get(1),
             criteriaNames.get(2), values.get(1)
         );
-        var B = new AlternativeEntity("B", criteriaToValueB);
+        var B = new AlternativeEntity(-1, "B", criteriaToValueB);
 
-        var rule = new Rule(new AlternativePair(A, B), RuleSet.PREPARE);
+        var rule = new RuleEntity(new AlternativePair(A, B), RuleSet.PREPARE);
         printTask(rule, dataContext);
 
         Assertions.assertTrue(crService.checkRule(rule, dataContext));
