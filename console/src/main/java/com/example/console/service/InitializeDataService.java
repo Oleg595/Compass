@@ -25,7 +25,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class InitializeDataService {
-    private final UserInteractionService compareValueService;
     private final DataContext dataContext;
 
     @Data
