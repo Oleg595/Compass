@@ -127,7 +127,7 @@ public class UserInteractionService {
     public void solveConflict(List<RuleEntity> conflictRules) {
         logger.info("A contradiction was found in the answers:");
         for (var index = 0; index < conflictRules.size(); ++index) {
-            System.out.println(
+            logger.info(
                 (index + 1) + ") " + conflictRules.get(index).toString(dataContext.getCriteriaNames()));
         }
         logger.info("Enter the number of the rule you want to fix or 0 to shut down the program: ");

@@ -234,7 +234,7 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
 
         var solver = createSolver();
         solver.setEpsel(.005);
-        solver.setTimeout(35L);
+        solver.setTimeout(80L);
         solver.solve();
         return extractAlternatives(solver.getPtrVariables());
     }

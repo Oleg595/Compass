@@ -9,6 +9,7 @@ import org.example.RuleSet;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -126,6 +127,7 @@ public class RuleService {
         if (chain == null || !checkChain(chain, rule)) {
             return null;
         }
+        Collections.reverse(chain);
         return chain;
     }
 

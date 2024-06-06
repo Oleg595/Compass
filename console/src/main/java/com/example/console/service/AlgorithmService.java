@@ -45,7 +45,7 @@ public class AlgorithmService {
 
     private AlternativeEntity useRuleAndPrint(AlternativeEntity alt, RuleEntity rule) {
         var criteriaNames = dataContext.getCriteriaNames();
-        System.out.print(alt.toString(criteriaNames) + " according to the rule:\n " + rule.prettyOut(criteriaNames));
+        logger.info(alt.toString(criteriaNames) + " according to the rule:\n " + rule.prettyOut(criteriaNames));
         printRuleSign(rule.getSet());
         var toAlt = alt.copy();
         var secondRuleAlt = rule.getPair().getSecond();
@@ -162,7 +162,7 @@ public class AlgorithmService {
                 }
             }
         }
-        System.out.println("The number of incomparable pairs of alternatives: " + nonComparableCount);
+        logger.info("The number of incomparable pairs of alternatives: " + nonComparableCount);
     }
 
     public StatisticsEntity runAlgorithm() throws LpSolveException {
@@ -176,7 +176,7 @@ public class AlgorithmService {
                 if (k < dataContext.getCriterias().size()) {
                     ++k;
                 } else {
-                    logger.info("Алгоритм не смог найти наилучшую альтернативу");
+                    logger.info("The algorithm could not find the best alternative");
                     for (var alt : dataContext.getNonPriorAlts()) {
                         outputLogicalChain(alt);
                     }
