@@ -31,9 +31,9 @@ public class UserInteractionService {
     @PostConstruct
     private void postConstruct() {
         if (isUser) {
-            logger.info("User input");
+            logger.info("MODE: User input");
         } else {
-            logger.info("System input");
+            logger.info("MODE: System input");
         }
     }
 
