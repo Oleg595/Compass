@@ -1,0 +1,945 @@
+{
+  "alts": [
+    {
+      "name": "TrustArc",
+      "criteriaToValue": {
+        "cb_rank": "2457",
+        "num_investors": "6",
+        "num_months": 329,
+        "funding_type": "series_d",
+        "funding_value": 107000000
+      }
+    },
+    {
+      "name": "Paystand",
+      "criteriaToValue": {
+        "cb_rank": "982",
+        "num_investors": "21",
+        "num_months": 137,
+        "funding_type": "series_unknown",
+        "funding_value": 98000000
+      }
+    },
+    {
+      "name": "Ingenio",
+      "criteriaToValue": {
+        "cb_rank": "2079",
+        "num_investors": "12",
+        "num_months": 305,
+        "funding_type": "secondary_market",
+        "funding_value": 289000000
+      }
+    },
+    {
+      "name": "Anaconda",
+      "criteriaToValue": {
+        "cb_rank": "956",
+        "num_investors": "4",
+        "num_months": 149,
+        "funding_type": "series_b",
+        "funding_value": 83000000
+      }
+    },
+    {
+      "name": "Taboola",
+      "criteriaToValue": {
+        "cb_rank": "677",
+        "num_investors": "25",
+        "num_months": 209,
+        "funding_type": "post_ipo_equity",
+        "funding_value": 446300000
+      }
+    },
+    {
+      "name": "FreeWire Technologies",
+      "criteriaToValue": {
+        "cb_rank": "655",
+        "num_investors": "32",
+        "num_months": 125,
+        "funding_type": "series_unknown",
+        "funding_value": 259389240
+      }
+    },
+    {
+      "name": "EarnIn",
+      "criteriaToValue": {
+        "cb_rank": "160",
+        "num_investors": "12",
+        "num_months": 149,
+        "funding_type": "series_c",
+        "funding_value": 190099999
+      }
+    },
+    {
+      "name": "Litify",
+      "criteriaToValue": {
+        "cb_rank": "2211",
+        "num_investors": "3",
+        "num_months": 101,
+        "funding_type": "series_unknown",
+        "funding_value": 78563208
+      }
+    },
+    {
+      "name": "DocuSign",
+      "criteriaToValue": {
+        "cb_rank": "367",
+        "num_investors": "52",
+        "num_months": 257,
+        "funding_type": "secondary_market",
+        "funding_value": 536199999
+      }
+    },
+    {
+      "name": "Spark Therapeutics",
+      "criteriaToValue": {
+        "cb_rank": "3364",
+        "num_investors": "7",
+        "num_months": 137,
+        "funding_type": "post_ipo_equity",
+        "funding_value": 763800000
+      }
+    },
+    {
+      "name": "Zeta Global",
+      "criteriaToValue": {
+        "cb_rank": "1402",
+        "num_investors": "15",
+        "num_months": 209,
+        "funding_type": "debt_financing",
+        "funding_value": 602500000
+      }
+    },
+    {
+      "name": "Certara",
+      "criteriaToValue": {
+        "cb_rank": "2873",
+        "num_investors": "3",
+        "num_months": 197,
+        "funding_type": "grant",
+        "funding_value": 838500000
+      }
+    },
+    {
+      "name": "Foodpanda",
+      "criteriaToValue": {
+        "cb_rank": "343",
+        "num_investors": "8",
+        "num_months": 149,
+        "funding_type": "private_equity",
+        "funding_value": 749450000
+      }
+    },
+    {
+      "name": "Smartling",
+      "criteriaToValue": {
+        "cb_rank": "1993",
+        "num_investors": "14",
+        "num_months": 185,
+        "funding_type": "series_e",
+        "funding_value": 223317998
+      }
+    },
+    {
+      "name": "Exabeam",
+      "criteriaToValue": {
+        "cb_rank": "404",
+        "num_investors": "15",
+        "num_months": 137,
+        "funding_type": "series_unknown",
+        "funding_value": 391000000
+      }
+    },
+    {
+      "name": "Skytap",
+      "criteriaToValue": {
+        "cb_rank": "4924",
+        "num_investors": "9",
+        "num_months": 221,
+        "funding_type": "series_unknown",
+        "funding_value": 127510000
+      }
+    },
+    {
+      "name": "Perficient",
+      "criteriaToValue": {
+        "cb_rank": "4469",
+        "num_investors": "1",
+        "num_months": 317,
+        "funding_type": "post_ipo_equity",
+        "funding_value": 65295756
+      }
+    },
+    {
+      "name": "HighRadius",
+      "criteriaToValue": {
+        "cb_rank": "166",
+        "num_investors": "10",
+        "num_months": 221,
+        "funding_type": "series_c",
+        "funding_value": 475000000
+      }
+    },
+    {
+      "name": "Strateos",
+      "criteriaToValue": {
+        "cb_rank": "2753",
+        "num_investors": "30",
+        "num_months": 148,
+        "funding_type": "series_b",
+        "funding_value": 105769999
+      }
+    },
+    {
+      "name": "Wave Computing",
+      "criteriaToValue": {
+        "cb_rank": "3977",
+        "num_investors": "4",
+        "num_months": 197,
+        "funding_type": "series_e",
+        "funding_value": 203309999
+      }
+    },
+    {
+      "name": "ZERO",
+      "criteriaToValue": {
+        "cb_rank": "4950",
+        "num_investors": "14",
+        "num_months": 125,
+        "funding_type": "series_a",
+        "funding_value": 12120000
+      }
+    },
+    {
+      "name": "TransUnion",
+      "criteriaToValue": {
+        "cb_rank": "1194",
+        "num_investors": "2",
+        "num_months": 677,
+        "funding_type": "post_ipo_debt",
+        "funding_value": 1407250806
+      }
+    },
+    {
+      "name": "Jam City",
+      "criteriaToValue": {
+        "cb_rank": "4255",
+        "num_investors": "10",
+        "num_months": 173,
+        "funding_type": "series_unknown",
+        "funding_value": 652000000
+      }
+    },
+    {
+      "name": "PagerDuty",
+      "criteriaToValue": {
+        "cb_rank": "401",
+        "num_investors": "17",
+        "num_months": 185,
+        "funding_type": "post_ipo_debt",
+        "funding_value": 523600000
+      }
+    },
+    {
+      "name": "BeiGene",
+      "criteriaToValue": {
+        "cb_rank": "2978",
+        "num_investors": "7",
+        "num_months": 173,
+        "funding_type": "post_ipo_equity",
+        "funding_value": 6790000000
+      }
+    },
+    {
+      "name": "Q4",
+      "criteriaToValue": {
+        "cb_rank": "3792",
+        "num_investors": "14",
+        "num_months": 221,
+        "funding_type": "debt_financing",
+        "funding_value": 91322516
+      }
+    },
+    {
+      "name": "HouseCanary",
+      "criteriaToValue": {
+        "cb_rank": "2166",
+        "num_investors": "15",
+        "num_months": 137,
+        "funding_type": "series_c",
+        "funding_value": 129000000
+      }
+    },
+    {
+      "name": "Mosaic",
+      "criteriaToValue": {
+        "cb_rank": "1330",
+        "num_investors": "18",
+        "num_months": 161,
+        "funding_type": "private_equity",
+        "funding_value": 489220772
+      }
+    },
+    {
+      "name": "Pivotal",
+      "criteriaToValue": {
+        "cb_rank": "1817",
+        "num_investors": "7",
+        "num_months": 137,
+        "funding_type": "series_unknown",
+        "funding_value": 1704000000
+      }
+    },
+    {
+      "name": "OSF Digital",
+      "criteriaToValue": {
+        "cb_rank": "4463",
+        "num_investors": "6",
+        "num_months": 257,
+        "funding_type": "series_c",
+        "funding_value": 189000000
+      }
+    },
+    {
+      "name": "Zimperium",
+      "criteriaToValue": {
+        "cb_rank": "4893",
+        "num_investors": "9",
+        "num_months": 173,
+        "funding_type": "series_unknown",
+        "funding_value": 72000000
+      }
+    },
+    {
+      "name": "Evolv Technology",
+      "criteriaToValue": {
+        "cb_rank": "2412",
+        "num_investors": "17",
+        "num_months": 137,
+        "funding_type": "post_ipo_debt",
+        "funding_value": 483319107
+      }
+    },
+    {
+      "name": "Bolt Threads",
+      "criteriaToValue": {
+        "cb_rank": "1685",
+        "num_investors": "18",
+        "num_months": 185,
+        "funding_type": "series_e",
+        "funding_value": 334118794
+      }
+    },
+    {
+      "name": "impact.com",
+      "criteriaToValue": {
+        "cb_rank": "333",
+        "num_investors": "8",
+        "num_months": 197,
+        "funding_type": "private_equity",
+        "funding_value": 361400000
+      }
+    },
+    {
+      "name": "Cradlepoint",
+      "criteriaToValue": {
+        "cb_rank": "4994",
+        "num_investors": "10",
+        "num_months": 221,
+        "funding_type": "series_c",
+        "funding_value": 162803255
+      }
+    },
+    {
+      "name": "Balbix",
+      "criteriaToValue": {
+        "cb_rank": "720",
+        "num_investors": "14",
+        "num_months": 113,
+        "funding_type": "series_c",
+        "funding_value": 101600000
+      }
+    },
+    {
+      "name": "Glossier",
+      "criteriaToValue": {
+        "cb_rank": "322",
+        "num_investors": "19",
+        "num_months": 173,
+        "funding_type": "series_e",
+        "funding_value": 266400000
+      }
+    },
+    {
+      "name": "OutSystems",
+      "criteriaToValue": {
+        "cb_rank": "224",
+        "num_investors": "12",
+        "num_months": 281,
+        "funding_type": "series_g",
+        "funding_value": 802081804
+      }
+    },
+    {
+      "name": "Seldon",
+      "criteriaToValue": {
+        "cb_rank": "3763",
+        "num_investors": "13",
+        "num_months": 118,
+        "funding_type": "series_b",
+        "funding_value": 33691771
+      }
+    }
+  ],
+  "criterias": [
+    {
+      "name": "cb_rank",
+      "values": [
+        {
+          "value": "160",
+          "priority": 1
+        },
+        {
+          "value": "166",
+          "priority": 2
+        },
+        {
+          "value": "224",
+          "priority": 3
+        },
+        {
+          "value": "322",
+          "priority": 4
+        },
+        {
+          "value": "333",
+          "priority": 5
+        },
+        {
+          "value": "343",
+          "priority": 6
+        },
+        {
+          "value": "367",
+          "priority": 7
+        },
+        {
+          "value": "401",
+          "priority": 8
+        },
+        {
+          "value": "404",
+          "priority": 9
+        },
+        {
+          "value": "655",
+          "priority": 10
+        },
+        {
+          "value": "677",
+          "priority": 11
+        },
+        {
+          "value": "720",
+          "priority": 12
+        },
+        {
+          "value": "956",
+          "priority": 13
+        },
+        {
+          "value": "982",
+          "priority": 14
+        },
+        {
+          "value": "1194",
+          "priority": 15
+        },
+        {
+          "value": "1330",
+          "priority": 16
+        },
+        {
+          "value": "1402",
+          "priority": 17
+        },
+        {
+          "value": "1685",
+          "priority": 18
+        },
+        {
+          "value": "1817",
+          "priority": 19
+        },
+        {
+          "value": "1993",
+          "priority": 20
+        },
+        {
+          "value": "2079",
+          "priority": 21
+        },
+        {
+          "value": "2166",
+          "priority": 22
+        },
+        {
+          "value": "2211",
+          "priority": 23
+        },
+        {
+          "value": "2412",
+          "priority": 24
+        },
+        {
+          "value": "2457",
+          "priority": 25
+        },
+        {
+          "value": "2753",
+          "priority": 26
+        },
+        {
+          "value": "2873",
+          "priority": 27
+        },
+        {
+          "value": "2978",
+          "priority": 28
+        },
+        {
+          "value": "3364",
+          "priority": 29
+        },
+        {
+          "value": "3763",
+          "priority": 30
+        },
+        {
+          "value": "3792",
+          "priority": 31
+        },
+        {
+          "value": "3977",
+          "priority": 32
+        },
+        {
+          "value": "4255",
+          "priority": 33
+        },
+        {
+          "value": "4463",
+          "priority": 34
+        },
+        {
+          "value": "4469",
+          "priority": 35
+        },
+        {
+          "value": "4893",
+          "priority": 36
+        },
+        {
+          "value": "4924",
+          "priority": 37
+        },
+        {
+          "value": "4950",
+          "priority": 38
+        },
+        {
+          "value": "4994",
+          "priority": 39
+        }
+      ]
+    },
+    {
+      "name": "num_investors",
+      "values": [
+        {
+          "value": "52",
+          "priority": 1
+        },
+        {
+          "value": "32",
+          "priority": 2
+        },
+        {
+          "value": "30",
+          "priority": 3
+        },
+        {
+          "value": "25",
+          "priority": 4
+        },
+        {
+          "value": "21",
+          "priority": 5
+        },
+        {
+          "value": "19",
+          "priority": 6
+        },
+        {
+          "value": "18",
+          "priority": 7
+        },
+        {
+          "value": "17",
+          "priority": 8
+        },
+        {
+          "value": "15",
+          "priority": 9
+        },
+        {
+          "value": "14",
+          "priority": 10
+        },
+        {
+          "value": "13",
+          "priority": 11
+        },
+        {
+          "value": "12",
+          "priority": 12
+        },
+        {
+          "value": "10",
+          "priority": 13
+        },
+        {
+          "value": "9",
+          "priority": 14
+        },
+        {
+          "value": "8",
+          "priority": 15
+        },
+        {
+          "value": "7",
+          "priority": 16
+        },
+        {
+          "value": "6",
+          "priority": 17
+        },
+        {
+          "value": "4",
+          "priority": 18
+        },
+        {
+          "value": "3",
+          "priority": 19
+        },
+        {
+          "value": "2",
+          "priority": 20
+        },
+        {
+          "value": "1",
+          "priority": 21
+        }
+      ]
+    },
+    {
+      "name": "num_months",
+      "values": [
+        {
+          "value": "677",
+          "priority": 1
+        },
+        {
+          "value": "329",
+          "priority": 2
+        },
+        {
+          "value": "317",
+          "priority": 3
+        },
+        {
+          "value": "305",
+          "priority": 4
+        },
+        {
+          "value": "281",
+          "priority": 5
+        },
+        {
+          "value": "257",
+          "priority": 6
+        },
+        {
+          "value": "221",
+          "priority": 7
+        },
+        {
+          "value": "209",
+          "priority": 8
+        },
+        {
+          "value": "197",
+          "priority": 9
+        },
+        {
+          "value": "185",
+          "priority": 10
+        },
+        {
+          "value": "173",
+          "priority": 11
+        },
+        {
+          "value": "161",
+          "priority": 12
+        },
+        {
+          "value": "149",
+          "priority": 13
+        },
+        {
+          "value": "148",
+          "priority": 14
+        },
+        {
+          "value": "137",
+          "priority": 15
+        },
+        {
+          "value": "125",
+          "priority": 16
+        },
+        {
+          "value": "118",
+          "priority": 17
+        },
+        {
+          "value": "113",
+          "priority": 18
+        },
+        {
+          "value": "101",
+          "priority": 19
+        }
+      ]
+    },
+    {
+      "name": "funding_type",
+      "values": [
+        {
+          "value": "debt_financing",
+          "priority": 1
+        },
+        {
+          "value": "grant",
+          "priority": 2
+        },
+        {
+          "value": "post_ipo_debt",
+          "priority": 3
+        },
+        {
+          "value": "post_ipo_equity",
+          "priority": 4
+        },
+        {
+          "value": "private_equity",
+          "priority": 5
+        },
+        {
+          "value": "secondary_market",
+          "priority": 6
+        },
+        {
+          "value": "series_a",
+          "priority": 7
+        },
+        {
+          "value": "series_b",
+          "priority": 8
+        },
+        {
+          "value": "series_c",
+          "priority": 9
+        },
+        {
+          "value": "series_d",
+          "priority": 10
+        },
+        {
+          "value": "series_e",
+          "priority": 11
+        },
+        {
+          "value": "series_g",
+          "priority": 12
+        },
+        {
+          "value": "series_unknown",
+          "priority": 13
+        }
+      ]
+    },
+    {
+      "name": "funding_value",
+      "values": [
+        {
+          "value": "6790000000",
+          "priority": 1
+        },
+        {
+          "value": "1704000000",
+          "priority": 2
+        },
+        {
+          "value": "1407250806",
+          "priority": 3
+        },
+        {
+          "value": "838500000",
+          "priority": 4
+        },
+        {
+          "value": "802081804",
+          "priority": 5
+        },
+        {
+          "value": "763800000",
+          "priority": 6
+        },
+        {
+          "value": "749450000",
+          "priority": 7
+        },
+        {
+          "value": "652000000",
+          "priority": 8
+        },
+        {
+          "value": "602500000",
+          "priority": 9
+        },
+        {
+          "value": "536199999",
+          "priority": 10
+        },
+        {
+          "value": "523600000",
+          "priority": 11
+        },
+        {
+          "value": "489220772",
+          "priority": 12
+        },
+        {
+          "value": "483319107",
+          "priority": 13
+        },
+        {
+          "value": "475000000",
+          "priority": 14
+        },
+        {
+          "value": "446300000",
+          "priority": 15
+        },
+        {
+          "value": "391000000",
+          "priority": 16
+        },
+        {
+          "value": "361400000",
+          "priority": 17
+        },
+        {
+          "value": "334118794",
+          "priority": 18
+        },
+        {
+          "value": "289000000",
+          "priority": 19
+        },
+        {
+          "value": "266400000",
+          "priority": 20
+        },
+        {
+          "value": "259389240",
+          "priority": 21
+        },
+        {
+          "value": "223317998",
+          "priority": 22
+        },
+        {
+          "value": "203309999",
+          "priority": 23
+        },
+        {
+          "value": "190099999",
+          "priority": 24
+        },
+        {
+          "value": "189000000",
+          "priority": 25
+        },
+        {
+          "value": "162803255",
+          "priority": 26
+        },
+        {
+          "value": "129000000",
+          "priority": 27
+        },
+        {
+          "value": "127510000",
+          "priority": 28
+        },
+        {
+          "value": "107000000",
+          "priority": 29
+        },
+        {
+          "value": "105769999",
+          "priority": 30
+        },
+        {
+          "value": "101600000",
+          "priority": 31
+        },
+        {
+          "value": "98000000",
+          "priority": 32
+        },
+        {
+          "value": "91322516",
+          "priority": 33
+        },
+        {
+          "value": "83000000",
+          "priority": 34
+        },
+        {
+          "value": "78563208",
+          "priority": 35
+        },
+        {
+          "value": "72000000",
+          "priority": 36
+        },
+        {
+          "value": "65295756",
+          "priority": 37
+        },
+        {
+          "value": "33691771",
+          "priority": 38
+        },
+        {
+          "value": "12120000",
+          "priority": 39
+        }
+      ]
+    }
+  ]
+}

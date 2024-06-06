@@ -49,6 +49,40 @@ public class CheckRuleTest {
         prettyOutRules(List.of(ruleToCheck), dataContext);
     }
 
+    private void printRuleSign(RuleSet set) {
+        if (set == RuleSet.PREPARE) {
+            System.out.println("                  лучше ");
+        }
+        if (set == RuleSet.EQUAL) {
+            System.out.println("                  эквивалентно ");
+        }
+    }
+
+    private AlternativeEntity useRuleAndPrint(AlternativeEntity alt, RuleEntity rule, DataContext dataContext) {
+        var criteriaNames = dataContext.getCriteriaNames();
+        System.out.println(alt.toString(criteriaNames) + " согласно правилу " + rule.toString(criteriaNames));
+        printRuleSign(rule.getSet());
+        var toAlt = alt.copy();
+        var secondRuleAlt = rule.getPair().getSecond();
+        for (var name : criteriaNames) {
+            if (secondRuleAlt.getCriteriaToValue().get(name) != null) {
+                var value = secondRuleAlt.getCriteriaToValue().get(name);
+                toAlt.getCriteriaToValue().put(name, value);
+            }
+        }
+        return toAlt;
+    }
+
+    private void printResult(
+        AlternativeEntity start, List<RuleEntity> rules, DataContext dataContext) {
+        System.out.println("Цепочка вывода утверждения:");
+        var currentState = start.copy();
+        for (var rule : rules) {
+            currentState = useRuleAndPrint(currentState, rule, dataContext);
+        }
+        System.out.println(currentState.toString(dataContext.getCriteriaNames()));
+    }
+
     @Test
     public void testCheckRule1() {
         var dataContext = contextFactory.createContext1();
@@ -72,7 +106,9 @@ public class CheckRuleTest {
         var rule = new RuleEntity(new AlternativePair(A, B), RuleSet.PREPARE);
         printTask(rule, dataContext);
 
-        Assertions.assertTrue(crService.checkRule(rule, dataContext));
+        var chain = crService.generateLogicalChainOrNull(rule, dataContext);
+        printResult(A, chain, dataContext);
+        Assertions.assertNotNull(chain);
     }
 
     @Test

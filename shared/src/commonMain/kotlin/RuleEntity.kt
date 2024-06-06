@@ -25,6 +25,19 @@ data class RuleEntity(
         return result.toString()
     }
 
+    fun prettyOut(criteriaNames: Set<String>): String {
+        val result = StringBuilder("(")
+        val first = pair.first
+        val second = pair.second
+        val ruleName = if (this.set == RuleSet.PREPARE) " приоритетнее\n" else " эквивалентно\n"
+        result
+            .append(first.toString(criteriaNames))
+            .append(ruleName)
+            .append(second.toString(criteriaNames))
+            .append(")")
+        return result.toString()
+    }
+
     fun copy(): RuleEntity {
         return RuleEntity(pair, set)
     }

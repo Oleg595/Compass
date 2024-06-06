@@ -118,17 +118,22 @@ public class InitializeDataService {
 
     public void init(String pathConfigFile) throws IOException {
         String json = IOUtils.toString(new InputStreamReader(new FileInputStream(pathConfigFile)));
-//        String json = IOUtils.toString(new InputStreamReader(
-//            Objects.requireNonNull(DataContext.class.getResourceAsStream(pathConfigFile))));
         try {
             var gson = new Gson();
             var context = gson.fromJson(json, ReadData.class);
             processCriterias(context.getCriterias());
             dataContext.setAlts(context.getAlts());
-//            compareValueService.processCriterias();
         } catch (JsonSyntaxException e) {
             System.out.println("Невозможно прочитать конфигурационный файл");
             System.exit(-1);
         }
+    }
+
+    public void clearContext() {
+        dataContext.getAltsComparsion().clear();
+        dataContext.getI().clear();
+        dataContext.getP().clear();
+        dataContext.getAlts().clear();
+        dataContext.getCriterias().clear();
     }
 }

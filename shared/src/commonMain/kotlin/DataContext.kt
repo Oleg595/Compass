@@ -22,7 +22,6 @@ data class DataContext(
 
     fun getNonPriorAlts(): List<AlternativeEntity> {
         val notPrepareAlts = altsComparsion
-            .filter { it.rule.set == RuleSet.PREPARE }
             .map { it.rule.pair.second }
         return alts.filter { alt -> notPrepareAlts.firstOrNull { it.isEqual(alt) } == null }
     }

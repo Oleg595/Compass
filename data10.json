@@ -1,0 +1,281 @@
+{
+  "alts": [
+    {
+      "name": "TrustArc",
+      "criteriaToValue": {
+        "cb_rank": "2457",
+        "num_investors": "6",
+        "num_months": 329,
+        "funding_type": "series_d",
+        "funding_value": 107000000
+      }
+    },
+    {
+      "name": "Paystand",
+      "criteriaToValue": {
+        "cb_rank": "982",
+        "num_investors": "21",
+        "num_months": 137,
+        "funding_type": "series_unknown",
+        "funding_value": 98000000
+      }
+    },
+    {
+      "name": "Ingenio",
+      "criteriaToValue": {
+        "cb_rank": "2079",
+        "num_investors": "12",
+        "num_months": 305,
+        "funding_type": "secondary_market",
+        "funding_value": 289000000
+      }
+    },
+    {
+      "name": "Anaconda",
+      "criteriaToValue": {
+        "cb_rank": "956",
+        "num_investors": "4",
+        "num_months": 149,
+        "funding_type": "series_b",
+        "funding_value": 83000000
+      }
+    },
+    {
+      "name": "Taboola",
+      "criteriaToValue": {
+        "cb_rank": "677",
+        "num_investors": "25",
+        "num_months": 209,
+        "funding_type": "post_ipo_equity",
+        "funding_value": 446300000
+      }
+    },
+    {
+      "name": "FreeWire Technologies",
+      "criteriaToValue": {
+        "cb_rank": "655",
+        "num_investors": "32",
+        "num_months": 125,
+        "funding_type": "series_unknown",
+        "funding_value": 259389240
+      }
+    },
+    {
+      "name": "EarnIn",
+      "criteriaToValue": {
+        "cb_rank": "160",
+        "num_investors": "12",
+        "num_months": 149,
+        "funding_type": "series_c",
+        "funding_value": 190099999
+      }
+    },
+    {
+      "name": "Litify",
+      "criteriaToValue": {
+        "cb_rank": "2211",
+        "num_investors": "3",
+        "num_months": 101,
+        "funding_type": "series_unknown",
+        "funding_value": 78563208
+      }
+    },
+    {
+      "name": "DocuSign",
+      "criteriaToValue": {
+        "cb_rank": "367",
+        "num_investors": "52",
+        "num_months": 257,
+        "funding_type": "secondary_market",
+        "funding_value": 536199999
+      }
+    }
+  ],
+  "criterias": [
+    {
+      "name": "cb_rank",
+      "values": [
+        {
+          "value": "160",
+          "priority": 1
+        },
+        {
+          "value": "367",
+          "priority": 2
+        },
+        {
+          "value": "655",
+          "priority": 3
+        },
+        {
+          "value": "677",
+          "priority": 4
+        },
+        {
+          "value": "956",
+          "priority": 5
+        },
+        {
+          "value": "982",
+          "priority": 6
+        },
+        {
+          "value": "2079",
+          "priority": 7
+        },
+        {
+          "value": "2211",
+          "priority": 8
+        },
+        {
+          "value": "2457",
+          "priority": 9
+        }
+      ]
+    },
+    {
+      "name": "num_investors",
+      "values": [
+        {
+          "value": "52",
+          "priority": 1
+        },
+        {
+          "value": "32",
+          "priority": 2
+        },
+        {
+          "value": "25",
+          "priority": 3
+        },
+        {
+          "value": "21",
+          "priority": 4
+        },
+        {
+          "value": "12",
+          "priority": 5
+        },
+        {
+          "value": "6",
+          "priority": 6
+        },
+        {
+          "value": "4",
+          "priority": 7
+        },
+        {
+          "value": "3",
+          "priority": 8
+        }
+      ]
+    },
+    {
+      "name": "num_months",
+      "values": [
+        {
+          "value": "329",
+          "priority": 1
+        },
+        {
+          "value": "305",
+          "priority": 2
+        },
+        {
+          "value": "257",
+          "priority": 3
+        },
+        {
+          "value": "209",
+          "priority": 4
+        },
+        {
+          "value": "149",
+          "priority": 5
+        },
+        {
+          "value": "137",
+          "priority": 6
+        },
+        {
+          "value": "125",
+          "priority": 7
+        },
+        {
+          "value": "101",
+          "priority": 8
+        }
+      ]
+    },
+    {
+      "name": "funding_type",
+      "values": [
+        {
+          "value": "post_ipo_equity",
+          "priority": 1
+        },
+        {
+          "value": "secondary_market",
+          "priority": 2
+        },
+        {
+          "value": "series_b",
+          "priority": 3
+        },
+        {
+          "value": "series_c",
+          "priority": 4
+        },
+        {
+          "value": "series_d",
+          "priority": 5
+        },
+        {
+          "value": "series_unknown",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "name": "funding_value",
+      "values": [
+        {
+          "value": "536199999",
+          "priority": 1
+        },
+        {
+          "value": "446300000",
+          "priority": 2
+        },
+        {
+          "value": "289000000",
+          "priority": 3
+        },
+        {
+          "value": "259389240",
+          "priority": 4
+        },
+        {
+          "value": "190099999",
+          "priority": 5
+        },
+        {
+          "value": "107000000",
+          "priority": 6
+        },
+        {
+          "value": "98000000",
+          "priority": 7
+        },
+        {
+          "value": "83000000",
+          "priority": 8
+        },
+        {
+          "value": "78563208",
+          "priority": 9
+        }
+      ]
+    }
+  ]
+}

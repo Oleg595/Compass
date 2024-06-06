@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.System.exit;
 
 @Service
 @AllArgsConstructor
 public class UserInteractionService {
-    private static final String ALTERNATIVE_QUESTION = "Выберите лучшее значение альтернативы (%s): 1 - %s; 2 - %s; 3" +
-        " - " +
-        "эквивалентны";
+    private static final String ALTERNATIVE_QUESTION =
+        "Выберите лучшее значение альтернативы (%s):\n 1 - %s;\n 2 - %s;\n 3 - эквивалентны";
 
     private final DataContext dataContext;
 
@@ -72,7 +72,9 @@ public class UserInteractionService {
         System.out.printf(
             (ALTERNATIVE_QUESTION) + "%n", getCriterias(pair.getFirst()),
             getAlternative(pair.getFirst()), getAlternative(pair.getSecond()));
-        processAnswer(reader.nextInt(), pair);
+        var nextAnswer = reader.nextInt();
+        System.out.println("Ответ: " + nextAnswer);
+        processAnswer(nextAnswer, pair);
     }
 
     public void solveConflict(List<RuleEntity> conflictRules) {

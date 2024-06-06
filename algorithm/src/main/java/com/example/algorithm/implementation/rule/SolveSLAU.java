@@ -255,7 +255,7 @@ class SLAUAnswerFinder {
         for (var result : currentResults) {
             copyResults.remove(result);
             var min = 0;
-            var max = 2; // опираться на размерность задачи
+            var max = 1; // опираться на размерность задачи
             for (var limit : varLimits) {
                 var sumVars = .0;
                 for (var index = 0; index < result.size(); ++index) {
@@ -355,7 +355,6 @@ class SLAUAnswerFinder {
 
 @Component
 @RequiredArgsConstructor
-//@Deprecated
 public class SolveSLAU {
     private SLAU generateSLAU(
         AlternativeEntity a, AlternativeEntity b, DataContext dataContext) {

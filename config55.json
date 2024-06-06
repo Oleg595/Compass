@@ -1,0 +1,182 @@
+{
+  "criterias": [
+    {
+      "name": "A",
+      "values": [
+        {
+          "value": "A1",
+          "priority": 1
+        },
+        {
+          "value": "A2",
+          "priority": 2
+        },
+        {
+          "value": "A3",
+          "priority": 3
+        },
+        {
+          "value": "A4",
+          "priority": 4
+        },
+        {
+          "value": "A5",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "name": "B",
+      "values": [
+        {
+          "value": "B1",
+          "priority": 1
+        },
+        {
+          "value": "B2",
+          "priority": 2
+        },
+        {
+          "value": "B3",
+          "priority": 3
+        },
+        {
+          "value": "B4",
+          "priority": 4
+        },
+        {
+          "value": "B5",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "name": "C",
+      "values": [
+        {
+          "value": "C1",
+          "priority": 1
+        },
+        {
+          "value": "C2",
+          "priority": 2
+        },
+        {
+          "value": "C3",
+          "priority": 3
+        },
+        {
+          "value": "C4",
+          "priority": 4
+        },
+        {
+          "value": "C5",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "name": "D",
+      "values": [
+        {
+          "value": "D1",
+          "priority": 1
+        },
+        {
+          "value": "D2",
+          "priority": 2
+        },
+        {
+          "value": "D3",
+          "priority": 3
+        },
+        {
+          "value": "D4",
+          "priority": 4
+        },
+        {
+          "value": "D5",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "name": "F",
+      "values": [
+        {
+          "value": "F1",
+          "priority": 1
+        },
+        {
+          "value": "F2",
+          "priority": 2
+        },
+        {
+          "value": "F3",
+          "priority": 3
+        },
+        {
+          "value": "F4",
+          "priority": 4
+        },
+        {
+          "value": "F5",
+          "priority": 5
+        }
+      ]
+    }
+  ],
+
+  "alts": [
+    {
+      "name": "1",
+      "criteriaToValue": {
+        "A": "A1",
+        "B": "B2",
+        "C": "C3",
+        "D": "D4",
+        "F": "F5"
+      }
+    },
+    {
+      "name": "2",
+      "criteriaToValue": {
+        "A": "A2",
+        "B": "B3",
+        "C": "C4",
+        "D": "D5",
+        "F": "F1"
+      }
+    },
+    {
+      "name": "3",
+      "criteriaToValue": {
+        "A": "A3",
+        "B": "B4",
+        "C": "C5",
+        "D": "D1",
+        "F": "F2"
+      }
+    },
+    {
+      "name": "4",
+      "criteriaToValue": {
+        "A": "A4",
+        "B": "B5",
+        "C": "C1",
+        "D": "D2",
+        "F": "F3"
+      }
+    },
+    {
+      "name": "5",
+      "criteriaToValue": {
+        "A": "A5",
+        "B": "B1",
+        "C": "C2",
+        "D": "D3",
+        "F": "F4"
+      }
+    }
+  ]
+}

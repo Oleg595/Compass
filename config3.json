@@ -1,0 +1,144 @@
+{
+  "criterias": [
+    {
+      "name": "Этап финансирования",
+      "values": [
+        {
+          "value": "SeriesA",
+          "priority": 1
+        },
+        {
+          "value": "Seed",
+          "priority": 2
+        }
+      ]
+    },
+    {
+      "name": "Главный инвестор",
+      "values": [
+        {
+          "value": "Harel Insuarence Investmance",
+          "priority": 1
+        },
+        {
+          "value": "Orzon Ventures",
+          "priority": 1
+        },
+        {
+          "value": "Reynolds and Reynolds",
+          "priority": 2
+        },
+        {
+          "value": "Erik Ragatz",
+          "priority": 3
+        }
+      ]
+    },
+    {
+      "name": "Общий фонд в млн $",
+      "values": [
+        {
+          "value": "19,7",
+          "priority": 1
+        },
+        {
+          "value": "15",
+          "priority": 2
+        },
+        {
+          "value": "13",
+          "priority": 3
+        },
+        {
+          "value": "0,5",
+          "priority": 4
+        }
+      ]
+    },
+    {
+      "name": "Индустрия",
+      "values": [
+        {
+          "value": "AI",
+          "priority": 1
+        },
+        {
+          "value": "Automative",
+          "priority": 2
+        },
+        {
+          "value": "Agritech",
+          "priority": 3
+        },
+        {
+          "value": "Healthcare",
+          "priority": 3
+        }
+      ]
+    },
+    {
+      "name": "Количество сотрудников",
+      "values": [
+        {
+          "value": "83",
+          "priority": 1
+        },
+        {
+          "value": "50",
+          "priority": 2
+        },
+        {
+          "value": "43",
+          "priority": 2
+        },
+        {
+          "value": "<25",
+          "priority": 3
+        }
+      ]
+    }
+  ],
+
+  "alts": [
+    {
+      "name": "Superplum",
+      "criteriaToValue": {
+        "Этап финансирования": "SeriesA",
+        "Главный инвестор": "Erik Ragatz",
+        "Индустрия": "Agritech",
+        "Количество сотрудников": "43",
+        "Общий фонд в млн $": "15"
+      }
+    },
+    {
+      "name": "Stella Automative AI",
+      "criteriaToValue": {
+        "Этап финансирования": "SeriesA",
+        "Главный инвестор": "Reynolds and Reynolds",
+        "Индустрия": "Automative",
+        "Количество сотрудников": "83",
+        "Общий фонд в млн $": "19,7"
+      }
+    },
+    {
+      "name": "AISAP",
+      "criteriaToValue": {
+        "Этап финансирования": "Seed",
+        "Главный инвестор": "Harel Insuarence Investmance",
+        "Индустрия": "Healthcare",
+        "Количество сотрудников": "<25",
+        "Общий фонд в млн $": "13"
+      }
+    },
+    {
+      "name": "Ai-Palette",
+      "criteriaToValue": {
+        "Этап финансирования": "SeriesA",
+        "Главный инвестор": "Orzon Ventures",
+        "Индустрия": "AI",
+        "Количество сотрудников": "50",
+        "Общий фонд в млн $": "0,5"
+      }
+    }
+  ]
+}

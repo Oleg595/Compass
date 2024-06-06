@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-// Перепроверить ограничения
 @Component
 public class CompareAlternativesCalculatorImpl implements CompareAlternativesCalculator {
     private DataContext dataContext;
@@ -123,37 +123,31 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
 
     private void addConstraints8(LpSolve solver) throws LpSolveException {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
-        var count = 0;
-        for (var criteria : dataContext.getCriterias()) {
-            var constraint1 = new double[1 + getDim()];
-            var constraint2 = new double[1 + getDim()];
-            for (var col = 0; col < criteria.getValues().size(); ++col) {
-                constraint1[1 + 2 * col + count] = 1.0;
-                constraint1[1 + 2 * col + 1 + count] = -1.0;
-                constraint2[1 + 2 * col + count] = 1.0;
+        for (var index = 0; index < Integer.min(getT(), 2); ++index) {
+            var count = 0;
+            for (var criteria : dataContext.getCriterias()) {
+                var constraint1 = new double[1 + getDim()];
+                var constraint2 = new double[1 + getDim()];
+                for (var col = 0; col < criteria.getValues().size(); ++col) {
+                    constraint1[1 + 2 * col + count + 2 * index * M] = 1.0;
+                    constraint1[1 + 2 * col + 1 + count + 2 * index * M] = -1.0;
+                    constraint2[1 + 2 * col + count + 2 * index * M] = 1.0;
+                }
+                count += 2 * criteria.getValues().size();
+                solver.addConstraint(constraint1, LpSolve.EQ, 0.0);
+                solver.addConstraint(constraint2, LpSolve.LE, 1.0);
             }
-            count += 2 * criteria.getValues().size();
-            solver.addConstraint(constraint1, LpSolve.EQ, 0.0);
-            solver.addConstraint(constraint2, LpSolve.LE, 1.0);
         }
     }
 
     private void addConstraints9(LpSolve solver) throws LpSolveException {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
-        var constraint = new double[1 + getDim()];
-        for (var col = 0; col < M; ++col) {
-            constraint[1 + 2 * col] = 1.0;
-        }
-        solver.addConstraint(constraint, LpSolve.LE, k);
-    }
-
-    private void addCustomConstraints(LpSolve solver) throws LpSolveException {
-        var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
-        for (var col = 0; col < M; ++col) {
+        for (var index = 0; index < Integer.min(getT(), 2); ++index) {
             var constraint = new double[1 + getDim()];
-            constraint[1 + 2 * col] = 1.0;
-            constraint[1 + 2 * col + 1] = 1.0;
-            solver.addConstraint(constraint, LpSolve.LE, 1.0);
+            for (var col = 0; col < M; ++col) {
+                constraint[1 + 2 * col + 2 * index * M] = 1.0;
+            }
+            solver.addConstraint(constraint, LpSolve.LE, k);
         }
     }
 
@@ -182,7 +176,6 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
         addConstraints7(solver);
         addConstraints8(solver);
         addConstraints9(solver);
-        addCustomConstraints(solver);
         addConstraint10(solver);
         return solver;
     }
@@ -199,20 +192,32 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
     private List<AlternativePair> extractAlternatives(double[] data) {
         var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
         var result = new ArrayList<AlternativePair>();
-        var delta1 = new ArrayList<Double>();
-        var delta2 = new ArrayList<Double>();
-        for (var col = 0; col < M; ++col) {
-            delta1.add(data[2 * col]);
-            delta2.add(data[2 * col + 1]);
-        }
-        if (delta1.stream().anyMatch(it -> it != 0.0) && delta2.stream().anyMatch(it -> it != 0.0)) {
-            var alt1 = AlternativeUtils.createByDelta(delta1, dataContext.getCriterias());
-            var alt2 = AlternativeUtils.createByDelta(delta2, dataContext.getCriterias());
-            var pair = new AlternativePair(alt1, alt2);
-            var inP = dataContext.getP().stream().anyMatch(it -> it.getPair().isEqual(pair));
-            var inI = dataContext.getI().stream().anyMatch(it -> it.getPair().isEqual(pair));
-            if (!inP && !inI && !comparableAlternatives(alt1, alt2)) {
-                result.add(pair);
+        for (var index = 0; index < Integer.min(getT(), 2); ++index) {
+            var delta1 = new ArrayList<Double>();
+            var delta2 = new ArrayList<Double>();
+            for (var col = 0; col < M; ++col) {
+                var value1 = data[2 * col + 2 * M * index];
+                var value2 = data[2 * col + 1 + 2 * M * index];
+                if (value1 == 0 || value1 != value2) {
+                    delta1.add(data[2 * col + 2 * M * index]);
+                    delta2.add(data[2 * col + 1 + 2 * M * index]);
+                } else {
+                    delta1.add(.0);
+                    delta2.add(.0);
+                }
+            }
+            if (delta1.stream().anyMatch(it -> it != 0.0) && delta2.stream().anyMatch(it -> it != 0.0)) {
+                var alt1 = AlternativeUtils.createByDelta(delta1, dataContext.getCriterias());
+                var alt2 = AlternativeUtils.createByDelta(delta2, dataContext.getCriterias());
+                var pair = new AlternativePair(alt1, alt2);
+                var inP = dataContext.getP().stream().anyMatch(it -> it.getPair().isEqual(pair));
+                var inI = dataContext.getI().stream().anyMatch(it -> it.getPair().isEqual(pair));
+                if (!inP && !inI && alt1.comparable(alt2)
+                    && !comparableAlternatives(alt1, alt2)
+                    && alt1.getCriteriaToValue().values().stream()
+                    .filter(Objects::nonNull).count() <= k) {
+                    result.add(pair);
+                }
             }
         }
         return result;
@@ -228,6 +233,8 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
         this.delta = AlternativeUtils.calculateDelta(pair, dataContext.getCriterias());
 
         var solver = createSolver();
+        solver.setEpsel(.005);
+        solver.setTimeout(35L);
         solver.solve();
         return extractAlternatives(solver.getPtrVariables());
     }

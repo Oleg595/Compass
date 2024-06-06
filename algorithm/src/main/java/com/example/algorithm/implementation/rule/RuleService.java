@@ -16,8 +16,6 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class RuleService {
-    private final SolveSLAU solver;
-
     private boolean canBeNextState(
         AlternativeEntity currentState, AlternativeEntity nextState) {
         var signCriterias = nextState.getCriteriaToValue().keySet();
@@ -121,7 +119,7 @@ public class RuleService {
         System.out.println(sumRule.toString(criteriaNames));
     }
 
-    private List<RuleEntity> generateChainFromRulesOrNull(List<RuleEntity> rules, RuleEntity rule, DataContext dataContext) {
+    private List<RuleEntity> generateChainFromRulesOrNull(List<RuleEntity> rules, RuleEntity rule) {
         var startState = rule.getPair().getFirst();
         var endState = rule.getPair().getSecond();
         var chain = generateChain(startState, endState, rules);
@@ -132,13 +130,14 @@ public class RuleService {
     }
 
     public List<RuleEntity> generateLogicalChainOrNull(RuleEntity rule, DataContext dataContext) {
-        var answers = solver.generateAndSolve(
-            rule.getPair().getFirst(), rule.getPair().getSecond(), dataContext);
-        for (var rules : answers) {
-            var chain = generateChainFromRulesOrNull(rules, rule, dataContext);
+        var sol = new SolveSLAUV2(rule.getPair(), dataContext);
+        var answer = sol.getNextOrEmpty();
+        while (!answer.isEmpty()) {
+            var chain = generateChainFromRulesOrNull(answer, rule);
             if (chain != null) {
                 return chain;
             }
+            answer = sol.getNextOrEmpty();
         }
         return null;
     }

@@ -82,6 +82,15 @@ public class CompareAlternativesCalculatorTest {
         Assertions.assertEquals(1, result.size());
         Assertions.assertTrue(compareCriteriaValues(expectedA, result.get(0).getFirst()));
         Assertions.assertTrue(compareCriteriaValues(expectedB, result.get(0).getSecond()));
+
+        var criterias = new HashSet<>(criteriaNames);
+        System.out.println("Альтернативы для формирования вопроса:");
+        System.out.println(pair.getFirst().toString(criterias));
+        System.out.println(pair.getSecond().toString(criterias));
+
+        System.out.println("Вычисленная пара альтернатив:");
+        System.out.println(result.get(0).getFirst().toString(criterias));
+        System.out.println(result.get(0).getSecond().toString(criterias));
     }
 
     @Test
@@ -109,12 +118,12 @@ public class CompareAlternativesCalculatorTest {
 
         var expectedA = new AlternativeEntity(
             -1, "expectedA", Map.of(
-            criteriaNames.get(0), values.get(0),
-            criteriaNames.get(1), values.get(2)
+            criteriaNames.get(0), values.get(1),
+            criteriaNames.get(1), values.get(1)
         ));
         var expectedB = new AlternativeEntity(
             -1, "expectedB", Map.of(
-            criteriaNames.get(0), values.get(1),
+            criteriaNames.get(0), values.get(2),
             criteriaNames.get(1), values.get(0)
         ));
         Assertions.assertEquals(1, result.size());

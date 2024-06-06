@@ -68,7 +68,7 @@ public class CompassController {
     }
 
     @RequestMapping(value = "/findConflicts", method = RequestMethod.POST)
-    public List<RuleEntity> findConflicts(@RequestBody DataContext dataContext) {
-        return compassAPI.findConflictChainOrNull(dataContext);
+    public ResponseEntity<List<RuleEntity>> findConflicts(@RequestBody DataContext dataContext) {
+        return ResponseEntity.ok(compassAPI.findConflictChainOrNull(dataContext));
     }
 }

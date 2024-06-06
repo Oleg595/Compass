@@ -27,14 +27,13 @@ public class AlgorithmProperties {
     }
 
     @Bean
-    public RuleService ruleService(SolveSLAU solveSLAU) {
-        return new RuleService(solveSLAU);
+    public RuleService ruleService() {
+        return new RuleService();
     }
 
     @Bean
-    public FindConflictService findConflictService(
-        RuleService ruleService, SolveSLAU solveSLAU) {
-        return new FindConflictServiceImpl(ruleService, solveSLAU);
+    public FindConflictService findConflictService(RuleService ruleService) {
+        return new FindConflictServiceImpl(ruleService);
     }
 
     @Bean

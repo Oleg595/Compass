@@ -52,4 +52,10 @@ data class AlternativeEntity(
     fun toStringWithName(criteriaNames: Set<String>): String {
         return "$name ${toString(criteriaNames)}"
     }
+
+    fun comparable(alternative: AlternativeEntity): Boolean {
+        val compareKeys = alternative.criteriaToValue.filter { it.value != null }.keys
+        val alternativeKeys = criteriaToValue.filter { it.value != null }.keys
+        return compareKeys == alternativeKeys
+    }
 }
