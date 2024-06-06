@@ -81,7 +81,7 @@ public class ForecastFunctionCalculatorImpl implements ForecastFunctionCalculato
             var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
             var dim = 1 + M + dataContext.getP().size();
             var result = LpSolve.makeLp(0, dim);
-            result.setOutputfile("./result.txt");
+//            result.setOutputfile("./result.txt");
             result.setMinim();
             addGoalFunctionForOptP(result);
             addDConstraints(result);
@@ -165,7 +165,7 @@ public class ForecastFunctionCalculatorImpl implements ForecastFunctionCalculato
             var M = ValueCalculatorUtils.calculateM(dataContext.getCriterias());
             var dim = M + dataContext.getP().size();
             var result = LpSolve.makeLp(0, dim);
-            result.setOutputfile("./result.txt");
+//            result.setOutputfile("./result.txt");
             result.setMinim();
             addGoalFunction(result);
             addDConstraints(result);

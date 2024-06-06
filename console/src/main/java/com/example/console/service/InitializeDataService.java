@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.util.IOUtils;
 import org.example.AlternativeEntity;
 import org.example.CriteriaEntity;
@@ -26,6 +28,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class InitializeDataService {
     private final DataContext dataContext;
+    private static final Logger logger = LogManager.getLogger(InitializeDataService.class);
 
     @Data
     private static class ReadData {
@@ -123,7 +126,7 @@ public class InitializeDataService {
             processCriterias(context.getCriterias());
             dataContext.setAlts(context.getAlts());
         } catch (JsonSyntaxException e) {
-            System.out.println("The configuration file cannot be read");
+            logger.error("The configuration file cannot be read");
             System.exit(-1);
         }
     }

@@ -20,9 +20,16 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.17.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.springframework.boot:spring-boot-starter:2.7.8")
+    implementation("org.springframework.boot:spring-boot-starter-log4j2:2.7.8")
     implementation("com.datumbox:lpsolve:5.5.2.0")
     implementation(project(":shared"))
     implementation(project(":algorithm"))
+}
+
+configurations {
+    all{
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+    }
 }
 
 val bootRun by tasks.getting(JavaExec::class) {

@@ -1,5 +1,7 @@
 package com.example.console.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.AlternativeEntity;
 import org.example.AlternativePair;
 import org.example.DataContext;
@@ -19,6 +21,7 @@ import static java.lang.System.exit;
 public class UserInteractionService {
     private static final String ALTERNATIVE_QUESTION =
         "Choose the best value of the alternative (%s):\n 1 - %s;\n 2 - %s;\n 3 - equals";
+    private static final Logger logger = LogManager.getLogger(UserInteractionService.class);
 
     @Value("${user-interaction.isUser:true}")
     private boolean isUser;
@@ -28,9 +31,9 @@ public class UserInteractionService {
     @PostConstruct
     private void postConstruct() {
         if (isUser) {
-            System.out.println("INFO: User input");
+            logger.info("User input");
         } else {
-            System.out.println("INFO: System input");
+            logger.info("System input");
         }
     }
 
@@ -85,7 +88,7 @@ public class UserInteractionService {
             var reader = new Scanner(System.in);
             var result = reader.nextInt();
             while (result < 1 || result > 3) {
-                System.out.println("Uncorrect answer. Please try again: ");
+                logger.warn("Incorrect answer. Please try again: ");
                 result = reader.nextInt();
             }
             return result;
@@ -99,11 +102,11 @@ public class UserInteractionService {
             var reader = new Scanner(System.in);
             var ruleIndex = reader.nextInt() - 1;
             if (ruleIndex == -1) {
-                System.out.println("The program cannot work correctly with a contradictory system");
+                logger.info("The program cannot work correctly with a contradictory system");
                 exit(-1);
             }
             while (ruleIndex < 0 || ruleIndex >= rulesSize) {
-                System.out.println("The rule number is incorrect. Please try again: ");
+                logger.warn("The rule number is incorrect. Please try again: ");
                 ruleIndex = reader.nextInt() - 1;
             }
             return ruleIndex;
@@ -113,21 +116,21 @@ public class UserInteractionService {
     }
 
     public void compareAlternatives(AlternativePair pair) {
-        System.out.printf(
-            (ALTERNATIVE_QUESTION) + "%n", getCriterias(pair.getFirst()),
-            getAlternative(pair.getFirst()), getAlternative(pair.getSecond()));
+        logger.info(
+            String.format((ALTERNATIVE_QUESTION) + "%n", getCriterias(pair.getFirst()),
+                getAlternative(pair.getFirst()), getAlternative(pair.getSecond())));
         var nextAnswer = getChooseAlternativeAnswer();
-        System.out.println("Answer: " + nextAnswer);
+        logger.info("Answer: " + nextAnswer);
         processAnswer(nextAnswer, pair);
     }
 
     public void solveConflict(List<RuleEntity> conflictRules) {
-        System.out.println("A contradiction was found in the answers:");
+        logger.info("A contradiction was found in the answers:");
         for (var index = 0; index < conflictRules.size(); ++index) {
             System.out.println(
                 (index + 1) + ") " + conflictRules.get(index).toString(dataContext.getCriteriaNames()));
         }
-        System.out.print("Enter the number of the rule you want to fix or 0 to shut down the program: ");
+        logger.info("Enter the number of the rule you want to fix or 0 to shut down the program: ");
         var ruleIndex = solveConflictAnswer(conflictRules.size());
         dataContext.removeRule(conflictRules.get(ruleIndex));
     }

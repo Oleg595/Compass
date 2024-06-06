@@ -87,7 +87,7 @@ public class SolveSLAUV2 {
 
     private LpSolve createSolver() throws LpSolveException {
         var solver = LpSolve.makeLp(0, getDim());
-        solver.setOutputfile("./result.txt");
+//        solver.setOutputfile("./result.txt");
         solver.setMinim();
         addGoalFunction(solver);
         addVarsConstraints(solver);

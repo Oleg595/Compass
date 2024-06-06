@@ -167,7 +167,7 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
 
     private LpSolve createSolver() throws LpSolveException {
         var solver = LpSolve.makeLp(0, getDim());
-        solver.setOutputfile("./result.txt");
+//        solver.setOutputfile("./result.txt");
         solver.setMaxim();
         addGoalFunction(solver);
         addConstraints4(solver);

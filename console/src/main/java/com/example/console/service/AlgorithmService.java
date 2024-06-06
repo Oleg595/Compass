@@ -5,6 +5,8 @@ import com.example.algorithm.implementation.rule.RuleService;
 import com.example.console.entity.StatisticsEntity;
 import lombok.AllArgsConstructor;
 import lpsolve.LpSolveException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.AlternativeComparsionEntity;
 import org.example.AlternativeEntity;
 import org.example.AlternativePair;
@@ -26,6 +28,7 @@ public class AlgorithmService {
     private final AlgorithmAPI algorithmAPI;
     private final RuleService ruleService;
     private final UserInteractionService cvService;
+    private static final Logger logger = LogManager.getLogger(AlgorithmService.class);
 
     private boolean hasAnswer() {
         return dataContext.getNonPriorAlts().size() == 1;
@@ -33,10 +36,10 @@ public class AlgorithmService {
 
     private void printRuleSign(RuleSet set) {
         if (set == RuleSet.PREPARE) {
-            System.out.println(" better alternative ");
+            logger.info(" better alternative ");
         }
         if (set == RuleSet.EQUAL) {
-            System.out.println(" equal alternative ");
+            logger.info(" equal alternative ");
         }
     }
 
@@ -52,8 +55,8 @@ public class AlgorithmService {
                 toAlt.getCriteriaToValue().put(name, value);
             }
         }
-        System.out.println(toAlt.toString(criteriaNames));
-        System.out.println();
+        logger.info(toAlt.toString(criteriaNames));
+        logger.info("");
         return toAlt;
     }
 
@@ -68,16 +71,16 @@ public class AlgorithmService {
             setName = " better ";
         }
 
-        System.out.println(
+        logger.info(
             best.toStringWithName(criteriaNames) + setName
                 + secondary.toStringWithName(criteriaNames) + ":\n");
 
         for (var rule : chain.getOutputRules()) {
             best = useRuleAndPrint(best, rule);
         }
-        System.out.println(best.toString(dataContext.getCriteriaNames()));
-        System.out.println("End of the rule chain output");
-        System.out.println();
+        logger.info(best.toString(dataContext.getCriteriaNames()));
+        logger.info("End of the rule chain output");
+        logger.info("");
     }
 
     private void outputLogicalChain(AlternativeEntity alt) {
@@ -132,7 +135,7 @@ public class AlgorithmService {
                 }
             }
             for (var alt : curAlts) {
-                System.out.println("Rank of the alternative " + alt.getName() + " : " + curRange);
+                logger.info("Rank of the alternative " + alt.getName() + " : " + curRange);
             }
             rangeToAlts.put(curRange, new ArrayList<>(curAlts));
             curRange++;
@@ -173,13 +176,12 @@ public class AlgorithmService {
                 if (k < dataContext.getCriterias().size()) {
                     ++k;
                 } else {
-//                    System.out.println("Алгоритм не смог найти наилучшую альтернативу");
-//                    for (var alt : dataContext.getNonPriorAlts()) {
-//                        outputLogicalChain(alt);
-//                    }
+                    logger.info("Алгоритм не смог найти наилучшую альтернативу");
+                    for (var alt : dataContext.getNonPriorAlts()) {
+                        outputLogicalChain(alt);
+                    }
+                    logger.info(System.currentTimeMillis() - start);
                     return null;
-//                        System.out.println(System.currentTimeMillis() - start);
-//                        exit(-1);
                 }
             } else {
                 for (var pair : compareAlts) {
@@ -199,7 +201,7 @@ public class AlgorithmService {
             compareAlts = algorithmAPI.calculateCompareAlternatives(dataContext, k);
         }
         var bestAlt = dataContext.getNonPriorAlts().get(0);
-        System.out.println(
+        logger.info(
             "The best alternative:\n" + bestAlt.toStringWithName(dataContext.getCriteriaNames()));
         outputLogicalChain(bestAlt);
         printRange(bestAlt);

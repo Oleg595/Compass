@@ -3,6 +3,8 @@ package com.example.console;
 import com.example.console.service.AlgorithmService;
 import com.example.console.service.InitializeDataService;
 import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class CompassRunner implements CommandLineRunner {
     private final InitializeDataService initService;
     private final AlgorithmService algorithmService;
+    private static final Logger logger = LogManager.getLogger(CompassRunner.class);
 
 
 //    private final AlgorithmService algorithmService;
@@ -107,8 +110,8 @@ public class CompassRunner implements CommandLineRunner {
             averageQuest += (double) stat.getNumQuests() / countsNum;
             averageTime += (double) stat.getTime() / countsNum;
         }
-        System.out.println("The average number of questions to the user: " + averageQuest);
-        System.out.println("The average running time of the algorithm: " + averageTime + " ms");
+        logger.info("The average number of questions to the user: " + averageQuest);
+        logger.info("The average running time of the algorithm: " + averageTime + " ms");
     }
 
     public static void main(String[] args) {
