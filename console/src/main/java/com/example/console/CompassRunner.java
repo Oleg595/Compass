@@ -107,8 +107,8 @@ public class CompassRunner implements CommandLineRunner {
             averageQuest += (double) stat.getNumQuests() / countsNum;
             averageTime += (double) stat.getTime() / countsNum;
         }
-        System.out.println("Среднее количество вопросов пользователю: " + averageQuest);
-        System.out.println("Среднее время работы алгоритма: " + averageTime + " мс");
+        System.out.println("The average number of questions to the user: " + averageQuest);
+        System.out.println("The average running time of the algorithm: " + averageTime + " ms");
     }
 
     public static void main(String[] args) {

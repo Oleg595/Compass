@@ -33,16 +33,16 @@ public class AlgorithmService {
 
     private void printRuleSign(RuleSet set) {
         if (set == RuleSet.PREPARE) {
-            System.out.println(" лучше альтернативы ");
+            System.out.println(" better alternative ");
         }
         if (set == RuleSet.EQUAL) {
-            System.out.println(" эквивалентно альтернативе ");
+            System.out.println(" equal alternative ");
         }
     }
 
     private AlternativeEntity useRuleAndPrint(AlternativeEntity alt, RuleEntity rule) {
         var criteriaNames = dataContext.getCriteriaNames();
-        System.out.print(alt.toString(criteriaNames) + " согласно правилу:\n " + rule.prettyOut(criteriaNames));
+        System.out.print(alt.toString(criteriaNames) + " according to the rule:\n " + rule.prettyOut(criteriaNames));
         printRuleSign(rule.getSet());
         var toAlt = alt.copy();
         var secondRuleAlt = rule.getPair().getSecond();
@@ -63,9 +63,9 @@ public class AlgorithmService {
         var secondary = chain.getRule().getPair().getSecond();
         var set = chain.getRule().getSet();
 
-        var setName = " эквивалентно ";
+        var setName = " equal ";
         if (set == RuleSet.PREPARE) {
-            setName = " лучше ";
+            setName = " better ";
         }
 
         System.out.println(
@@ -76,7 +76,7 @@ public class AlgorithmService {
             best = useRuleAndPrint(best, rule);
         }
         System.out.println(best.toString(dataContext.getCriteriaNames()));
-        System.out.println("Конец вывода цепочки правил");
+        System.out.println("End of the rule chain output");
         System.out.println();
     }
 
@@ -132,7 +132,7 @@ public class AlgorithmService {
                 }
             }
             for (var alt : curAlts) {
-                System.out.println("Ранг альтернативы " + alt.getName() + " : " + curRange);
+                System.out.println("Rank of the alternative " + alt.getName() + " : " + curRange);
             }
             rangeToAlts.put(curRange, new ArrayList<>(curAlts));
             curRange++;
@@ -159,7 +159,7 @@ public class AlgorithmService {
                 }
             }
         }
-        System.out.println("Количество несравнимых пар альтернатив: " + nonComparableCount);
+        System.out.println("The number of incomparable pairs of alternatives: " + nonComparableCount);
     }
 
     public StatisticsEntity runAlgorithm() throws LpSolveException {
@@ -200,7 +200,7 @@ public class AlgorithmService {
         }
         var bestAlt = dataContext.getNonPriorAlts().get(0);
         System.out.println(
-            "Наилучшая альтернатива:\n" + bestAlt.toStringWithName(dataContext.getCriteriaNames()));
+            "The best alternative:\n" + bestAlt.toStringWithName(dataContext.getCriteriaNames()));
         outputLogicalChain(bestAlt);
         printRange(bestAlt);
         time += System.currentTimeMillis() - start;

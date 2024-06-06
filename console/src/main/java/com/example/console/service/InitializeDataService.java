@@ -124,7 +124,7 @@ public class InitializeDataService {
             processCriterias(context.getCriterias());
             dataContext.setAlts(context.getAlts());
         } catch (JsonSyntaxException e) {
-            System.out.println("Невозможно прочитать конфигурационный файл");
+            System.out.println("The configuration file cannot be read");
             System.exit(-1);
         }
     }

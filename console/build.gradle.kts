@@ -26,6 +26,9 @@ dependencies {
 }
 
 val bootRun by tasks.getting(JavaExec::class) {
-//    main = com.example.console.CompassRunner
     standardInput = System.`in`
+}
+
+tasks.getting(JavaCompile::class) {
+    options.encoding = "UTF-8"
 }

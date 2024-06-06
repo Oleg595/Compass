@@ -17,7 +17,7 @@ import static java.lang.System.exit;
 @AllArgsConstructor
 public class UserInteractionService {
     private static final String ALTERNATIVE_QUESTION =
-        "Выберите лучшее значение альтернативы (%s):\n 1 - %s;\n 2 - %s;\n 3 - эквивалентны";
+        "Choose the best value of the alternative (%s):\n 1 - %s;\n 2 - %s;\n 3 - equals";
 
     private final DataContext dataContext;
 
@@ -33,7 +33,7 @@ public class UserInteractionService {
                 dataContext.addI(pair);
                 break;
             default:
-                throw new IllegalArgumentException("Указан некорректный ответ");
+                throw new IllegalArgumentException("An incorrect response was specified");
         }
     }
 
@@ -73,25 +73,25 @@ public class UserInteractionService {
             (ALTERNATIVE_QUESTION) + "%n", getCriterias(pair.getFirst()),
             getAlternative(pair.getFirst()), getAlternative(pair.getSecond()));
         var nextAnswer = reader.nextInt();
-        System.out.println("Ответ: " + nextAnswer);
+        System.out.println("Answer: " + nextAnswer);
         processAnswer(nextAnswer, pair);
     }
 
     public void solveConflict(List<RuleEntity> conflictRules) {
         var reader = new Scanner(System.in);
-        System.out.println("В ответах найдено противоречие:");
+        System.out.println("A contradiction was found in the answers:");
         for (var index = 0; index < conflictRules.size(); ++index) {
             System.out.println(
                 (index + 1) + ") " + conflictRules.get(index).toString(dataContext.getCriteriaNames()));
         }
-        System.out.print("Введите номер правила, который хотите исправить или 0 для завершения работы программы: ");
+        System.out.print("Enter the number of the rule you want to fix or 0 to shut down the program: ");
         var ruleIndex = reader.nextInt() - 1;
         if (ruleIndex == -1) {
-            System.out.println("Программа не может работать корректно с противоречивой системой");
+            System.out.println("The program cannot work correctly with a contradictory system");
             exit(-1);
         }
         while (ruleIndex < 0 || ruleIndex >= conflictRules.size()) {
-            System.out.println("Указан неверный номер правила. Повторите попытку: ");
+            System.out.println("The rule number is incorrect. Please try again: ");
             ruleIndex = reader.nextInt() - 1;
         }
         dataContext.removeRule(conflictRules.get(ruleIndex));

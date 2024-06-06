@@ -29,7 +29,7 @@ data class RuleEntity(
         val result = StringBuilder("(")
         val first = pair.first
         val second = pair.second
-        val ruleName = if (this.set == RuleSet.PREPARE) " приоритетнее\n" else " эквивалентно\n"
+        val ruleName = if (this.set == RuleSet.PREPARE) " prior\n" else " equal\n"
         result
             .append(first.toString(criteriaNames))
             .append(ruleName)
