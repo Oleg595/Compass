@@ -2,8 +2,8 @@ package com.example.console.service;
 
 import com.example.algorithm.AlgorithmAPI;
 import com.example.algorithm.implementation.rule.RuleService;
+import com.example.console.entity.AnswerStatisticEntity;
 import com.example.console.entity.StatisticsEntity;
-import lombok.AllArgsConstructor;
 import lpsolve.LpSolveException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +13,7 @@ import org.example.AlternativePair;
 import org.example.DataContext;
 import org.example.RuleEntity;
 import org.example.RuleSet;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,13 +23,27 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-@AllArgsConstructor
 public class AlgorithmService {
     private final DataContext dataContext;
     private final AlgorithmAPI algorithmAPI;
     private final RuleService ruleService;
     private final UserInteractionService cvService;
+    private final Map<Integer, AnswerStatisticEntity> answerStats = new HashMap<>();
+    @Value("${algorithm.error_threshhold:0.3}")
+    private double errorThreshold;
     private static final Logger logger = LogManager.getLogger(AlgorithmService.class);
+
+    public AlgorithmService(
+        DataContext dataContext, AlgorithmAPI algorithmAPI, RuleService ruleService, UserInteractionService cvService) {
+        this.dataContext = dataContext;
+        this.algorithmAPI = algorithmAPI;
+        this.ruleService = ruleService;
+        this.cvService = cvService;
+
+        if (errorThreshold > 1.0 || errorThreshold < .0) {
+            logger.error("Incorrect error threshold: " + errorThreshold);
+        }
+    }
 
     private boolean hasAnswer() {
         return dataContext.getNonPriorAlts().size() == 1;
@@ -154,8 +169,8 @@ public class AlgorithmService {
                         nonComparableCount++;
                     }
                 }
-                for (var j = 0; j < prepare.size(); ++j) {
-                    var pair = new AlternativePair(equal.get(i), prepare.get(j));
+                for (AlternativeEntity alternativeEntity : prepare) {
+                    var pair = new AlternativePair(equal.get(i), alternativeEntity);
                     if (!ruleService.checkRule(new RuleEntity(pair, RuleSet.PREPARE), dataContext)) {
                         nonComparableCount++;
                     }
@@ -165,7 +180,32 @@ public class AlgorithmService {
         logger.info("The number of incomparable pairs of alternatives: " + nonComparableCount);
     }
 
+    private void addAnswer(AlternativePair pair) {
+        var num = pair.getFirst().getCriteriaNum();
+        answerStats.get(num).addQuest();
+    }
+
+    private void addError(RuleEntity rule) {
+        var num = rule.getPair().getFirst().getCriteriaNum();
+        answerStats.get(num).addError();
+    }
+
+    private boolean checkForContinueAfterError() {
+        for (var stat : answerStats.values()) {
+            var error = stat.getNumErrors();
+            var quest = stat.getNumQuestions();
+            if ((double) error / quest > errorThreshold) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public StatisticsEntity runAlgorithm() throws LpSolveException {
+        answerStats.clear();
+        for(var index = 0; index < dataContext.getCriterias().size(); ++index) {
+            answerStats.put(index + 1, new AnswerStatisticEntity());
+        }
         var k = 2;
         var numQuest = 0;
         var start = System.currentTimeMillis();
@@ -187,13 +227,22 @@ public class AlgorithmService {
                 for (var pair : compareAlts) {
                     time += System.currentTimeMillis() - start;
                     cvService.compareAlternatives(pair);
+                    addAnswer(pair);
                     numQuest++;
                     start = System.currentTimeMillis();
                 }
                 var conflict = algorithmAPI.findConflictChainOrNull(dataContext);
                 while (conflict != null) {
                     time += System.currentTimeMillis() - start;
-                    cvService.solveConflict(conflict);
+                    var rule = cvService.solveConflict(conflict);
+                    addError(rule);
+                    var pair = rule.getPair();
+                    cvService.compareAlternatives(rule.getPair());
+                    addAnswer(pair);
+                    if (!checkForContinueAfterError()) {
+                        logger.error("The number of incorrect answers has been exceeded");
+                        return null;
+                    }
                     start = System.currentTimeMillis();
                     conflict = algorithmAPI.findConflictChainOrNull(dataContext);
                 }

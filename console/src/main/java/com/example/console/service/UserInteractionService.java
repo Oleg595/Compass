@@ -124,7 +124,7 @@ public class UserInteractionService {
         processAnswer(nextAnswer, pair);
     }
 
-    public void solveConflict(List<RuleEntity> conflictRules) {
+    public RuleEntity solveConflict(List<RuleEntity> conflictRules) {
         logger.info("A contradiction was found in the answers:");
         for (var index = 0; index < conflictRules.size(); ++index) {
             logger.info(
@@ -132,6 +132,8 @@ public class UserInteractionService {
         }
         logger.info("Enter the number of the rule you want to fix or 0 to shut down the program: ");
         var ruleIndex = solveConflictAnswer(conflictRules.size());
-        dataContext.removeRule(conflictRules.get(ruleIndex));
+        var rule = conflictRules.get(ruleIndex);
+        dataContext.removeRule(rule);
+        return rule;
     }
 }

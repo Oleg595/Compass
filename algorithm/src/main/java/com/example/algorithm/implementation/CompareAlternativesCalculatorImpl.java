@@ -214,8 +214,7 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
                 var inI = dataContext.getI().stream().anyMatch(it -> it.getPair().isEqual(pair));
                 if (!inP && !inI && alt1.comparable(alt2)
                     && !comparableAlternatives(alt1, alt2)
-                    && alt1.getCriteriaToValue().values().stream()
-                    .filter(Objects::nonNull).count() <= k) {
+                    && alt1.getCriteriaNum() <= k && alt1.getCriteriaNum() > 1) {
                     result.add(pair);
                 }
             }
@@ -233,8 +232,8 @@ public class CompareAlternativesCalculatorImpl implements CompareAlternativesCal
         this.delta = AlternativeUtils.calculateDelta(pair, dataContext.getCriterias());
 
         var solver = createSolver();
-        solver.setEpsel(.005);
-        solver.setTimeout(80L);
+        solver.setEpsel(.001);
+        solver.setTimeout(50L);
         solver.solve();
         return extractAlternatives(solver.getPtrVariables());
     }

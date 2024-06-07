@@ -97,14 +97,18 @@ public class CompassRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         var averageQuest = .0;
-        var countsNum = 1;
+        var countsNum = 3;
         var averageTime = .0;
         for (var index = 0; index < countsNum; index++) {
             initService.init(args[0]);
             var stat = algorithmService.runAlgorithm();
             initService.clearContext();
+            logger.info("End of task");
+            logger.info("");
+            logger.info("");
+            logger.info("");
             if (stat == null) {
-                index--;
+//                index--;
                 continue;
             }
             averageQuest += (double) stat.getNumQuests() / countsNum;

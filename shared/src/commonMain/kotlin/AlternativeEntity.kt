@@ -13,6 +13,10 @@ data class AlternativeEntity(
         return criteriaToValue[criteriaName]
     }
 
+    fun getCriteriaNum(): Int {
+        return criteriaToValue.filter { it.value != null }.keys.size
+    }
+
     fun isEqual(alt: AlternativeEntity): Boolean {
         val critNames = alt.criteriaToValue.keys
         if (critNames.equals(criteriaToValue.keys)) {
