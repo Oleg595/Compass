@@ -1,7 +1,7 @@
 package com.example.algorithm.implementation;
 
 import com.example.algorithm.common.ForecastFunctionCalculator;
-import com.example.algorithm.entity.ForecastFunctionEntity;
+import com.example.algorithm.function.ForecastFunction;
 import com.example.algorithm.utils.ValueCalculatorUtils;
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
@@ -192,11 +192,11 @@ public class ForecastFunctionCalculatorImpl implements ForecastFunctionCalculato
         }
     }
 
-    public ForecastFunctionEntity calculateForecastFunction(DataContext dataContext) throws LpSolveException {
+    public ForecastFunction calculateForecastFunction(DataContext dataContext) throws LpSolveException {
         this.dataContext = dataContext;
         var pCalc = new CalculateOptimalP();
         var optP = pCalc.getOptP();
         var vCalc = new CalculateOptimalV();
-        return new ForecastFunctionEntity(vCalc.getOptV(optP));
+        return new ForecastFunction(vCalc.getOptV(optP));
     }
 }

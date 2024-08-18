@@ -1,5 +1,6 @@
 package com.example.console;
 
+import com.example.console.configuration.ValueConfiguration;
 import com.example.console.service.AlgorithmService;
 import com.example.console.service.InitializeDataService;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @SpringBootApplication
 public class CompassRunner implements CommandLineRunner {
+    private final ValueConfiguration valConf;
     private final InitializeDataService initService;
     private final AlgorithmService algorithmService;
     private static final Logger logger = LogManager.getLogger(CompassRunner.class);
@@ -108,14 +110,15 @@ public class CompassRunner implements CommandLineRunner {
             logger.info("");
             logger.info("");
             if (stat == null) {
-//                index--;
                 continue;
             }
             averageQuest += (double) stat.getNumQuests() / countsNum;
             averageTime += (double) stat.getTime() / countsNum;
         }
-        logger.info("The average number of questions to the user: " + averageQuest);
-        logger.info("The average running time of the algorithm: " + averageTime + " ms");
+        if (valConf.outMetrics) {
+            logger.info("The average number of questions to the user: " + averageQuest);
+            logger.info("The average running time of the algorithm: " + averageTime + " ms");
+        }
     }
 
     public static void main(String[] args) {

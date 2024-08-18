@@ -2,8 +2,9 @@ package com.example.console.service;
 
 import com.example.algorithm.AlgorithmAPI;
 import com.example.algorithm.implementation.rule.RuleService;
-import com.example.console.entity.AnswerStatisticEntity;
-import com.example.console.entity.StatisticsEntity;
+import com.example.console.configuration.ValueConfiguration;
+import com.example.console.statistics.AnswerStatistics;
+import com.example.console.statistics.AlgorithmStatistics;
 import lpsolve.LpSolveException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +14,6 @@ import org.example.AlternativePair;
 import org.example.DataContext;
 import org.example.RuleEntity;
 import org.example.RuleSet;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,24 +24,25 @@ import java.util.stream.Collectors;
 
 @Component
 public class AlgorithmService {
+    private final ValueConfiguration valConf;
     private final DataContext dataContext;
     private final AlgorithmAPI algorithmAPI;
     private final RuleService ruleService;
     private final UserInteractionService cvService;
-    private final Map<Integer, AnswerStatisticEntity> answerStats = new HashMap<>();
-    @Value("${algorithm.error_threshhold:0.3}")
-    private double errorThreshold;
+    private final Map<Integer, AnswerStatistics> answerStats = new HashMap<>();
     private static final Logger logger = LogManager.getLogger(AlgorithmService.class);
 
     public AlgorithmService(
-        DataContext dataContext, AlgorithmAPI algorithmAPI, RuleService ruleService, UserInteractionService cvService) {
+        DataContext dataContext, AlgorithmAPI algorithmAPI, RuleService ruleService,
+        UserInteractionService cvService, ValueConfiguration contConf) {
         this.dataContext = dataContext;
         this.algorithmAPI = algorithmAPI;
         this.ruleService = ruleService;
         this.cvService = cvService;
+        this.valConf = contConf;
 
-        if (errorThreshold > 1.0 || errorThreshold < .0) {
-            logger.error("Incorrect error threshold: " + errorThreshold);
+        if (contConf.errorThreshold > 1.0 || contConf.errorThreshold < .0) {
+            logger.error("Incorrect error threshold: " + contConf.errorThreshold);
         }
     }
 
@@ -194,17 +195,17 @@ public class AlgorithmService {
         for (var stat : answerStats.values()) {
             var error = stat.getNumErrors();
             var quest = stat.getNumQuestions();
-            if ((double) error / quest > errorThreshold) {
+            if ((double) error / quest > valConf.errorThreshold) {
                 return false;
             }
         }
         return true;
     }
 
-    public StatisticsEntity runAlgorithm() throws LpSolveException {
+    public AlgorithmStatistics runAlgorithm() throws LpSolveException {
         answerStats.clear();
         for(var index = 0; index < dataContext.getCriterias().size(); ++index) {
-            answerStats.put(index + 1, new AnswerStatisticEntity());
+            answerStats.put(index + 1, new AnswerStatistics());
         }
         var k = 2;
         var numQuest = 0;
@@ -220,7 +221,9 @@ public class AlgorithmService {
                     for (var alt : dataContext.getNonPriorAlts()) {
                         outputLogicalChain(alt);
                     }
-                    logger.info(System.currentTimeMillis() - start);
+                    if (valConf.outMetrics) {
+                        logger.info(System.currentTimeMillis() - start);
+                    }
                     return null;
                 }
             } else {
@@ -255,6 +258,6 @@ public class AlgorithmService {
         outputLogicalChain(bestAlt);
         printRange(bestAlt);
         time += System.currentTimeMillis() - start;
-        return new StatisticsEntity(numQuest, time);
+        return new AlgorithmStatistics(numQuest, time);
     }
 }

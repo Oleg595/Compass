@@ -1,5 +1,6 @@
 package com.example.console.service;
 
+import com.example.console.configuration.ValueConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.AlternativeEntity;
@@ -7,7 +8,6 @@ import org.example.AlternativePair;
 import org.example.DataContext;
 import org.example.RuleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -23,14 +23,15 @@ public class UserInteractionService {
         "Choose the best value of the alternative (%s):\n 1 - %s;\n 2 - %s;\n 3 - equals";
     private static final Logger logger = LogManager.getLogger(UserInteractionService.class);
 
-    @Value("${user-interaction.isUser:true}")
-    private boolean isUser;
+    @Autowired
+    private ValueConfiguration valConf;
+
     @Autowired
     private DataContext dataContext;
 
     @PostConstruct
     private void postConstruct() {
-        if (isUser) {
+        if (valConf.isUser) {
             logger.info("MODE: User input");
         } else {
             logger.info("MODE: System input");
@@ -84,7 +85,7 @@ public class UserInteractionService {
     }
 
     private int getChooseAlternativeAnswer() {
-        if (isUser) {
+        if (valConf.isUser) {
             var reader = new Scanner(System.in);
             var result = reader.nextInt();
             while (result < 1 || result > 3) {
@@ -98,7 +99,7 @@ public class UserInteractionService {
     }
 
     private int solveConflictAnswer(int rulesSize) {
-        if (isUser) {
+        if (valConf.isUser) {
             var reader = new Scanner(System.in);
             var ruleIndex = reader.nextInt() - 1;
             if (ruleIndex == -1) {

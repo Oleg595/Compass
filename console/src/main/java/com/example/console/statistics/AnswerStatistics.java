@@ -1,11 +1,11 @@
-package com.example.console.entity;
+package com.example.console.statistics;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AnswerStatisticEntity {
+public class AnswerStatistics {
     private int numQuestions = 0;
     private int numErrors = 0;
 

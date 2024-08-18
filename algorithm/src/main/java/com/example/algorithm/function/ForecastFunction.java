@@ -1,4 +1,4 @@
-package com.example.algorithm.entity;
+package com.example.algorithm.function;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class ForecastFunctionEntity implements Function<List<Double>, Double> {
+public class ForecastFunction implements Function<List<Double>, Double> {
     List<Double> v;
 
     @Override

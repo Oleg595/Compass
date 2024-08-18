@@ -58,10 +58,10 @@ tasks.compileJava {
 
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = false
-        csv.isEnabled = false
-        html.isEnabled = true
-        html.destination = file("$buildDir/reports/coverage")
+//        xml.isEnabled = false
+//        csv.isEnabled = false
+//        html.isEnabled = true
+//        html.destination = file("$buildDir/reports/coverage")
     }
 }
 

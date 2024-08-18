@@ -1,6 +1,5 @@
 package com.example.console.service;
 
-import com.example.algorithm.entity.ReadCriteriaEntity;
 import com.example.algorithm.utils.AlternativeUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -31,8 +30,14 @@ public class InitializeDataService {
     private static final Logger logger = LogManager.getLogger(InitializeDataService.class);
 
     @Data
+    private class ReadCriteriaData {
+        private final String name;
+        private final List<Map<String, Object>> values;
+    }
+
+    @Data
     private static class ReadData {
-        private List<ReadCriteriaEntity> criterias;
+        private List<ReadCriteriaData> criterias;
         private List<AlternativeEntity> alts;
     }
 
@@ -75,7 +80,7 @@ public class InitializeDataService {
         }
     }
 
-    private List<String> getSortValues(ReadCriteriaEntity readCriteria) {
+    private List<String> getSortValues(ReadCriteriaData readCriteria) {
         final String valueFieldName = "value";
         final String priorFieldName = "priority";
 
@@ -99,7 +104,7 @@ public class InitializeDataService {
         return result;
     }
 
-    private void processCriterias(List<ReadCriteriaEntity> readCriterias) {
+    private void processCriterias(List<ReadCriteriaData> readCriterias) {
         final String valueFieldName = "value";
         final String priorFieldName = "priority";
         for (var readCriteria : readCriterias) {

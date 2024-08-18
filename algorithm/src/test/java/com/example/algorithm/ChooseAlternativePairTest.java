@@ -3,7 +3,7 @@ package com.example.algorithm;
 import com.example.algorithm.common.ChooseAlternativePairService;
 import com.example.algorithm.common.ForecastFunctionCalculator;
 import com.example.algorithm.configurator.AlgorithmConfigurator;
-import com.example.algorithm.entity.ForecastFunctionEntity;
+import com.example.algorithm.function.ForecastFunction;
 import com.example.algorithm.factory.ContextFactory;
 import com.example.algorithm.utils.AlternativeUtils;
 import lpsolve.LpSolveException;
@@ -108,7 +108,7 @@ public class ChooseAlternativePairTest {
     }
 
     private void printFunctionValueForAlt(
-        ForecastFunctionEntity fFunction, AlternativeEntity alt, DataContext dataContext) {
+        ForecastFunction fFunction, AlternativeEntity alt, DataContext dataContext) {
         var criteriaNames  = dataContext.getCriteriaNames();
         var delta = AlternativeUtils.calculateDelta(alt, dataContext.getCriterias());
         var value = fFunction.apply(delta);

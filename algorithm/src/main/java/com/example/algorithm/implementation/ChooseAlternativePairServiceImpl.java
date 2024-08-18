@@ -1,7 +1,7 @@
 package com.example.algorithm.implementation;
 
 import com.example.algorithm.common.ChooseAlternativePairService;
-import com.example.algorithm.entity.ForecastFunctionEntity;
+import com.example.algorithm.function.ForecastFunction;
 import com.example.algorithm.implementation.rule.RuleService;
 import com.example.algorithm.utils.AlternativeUtils;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class ChooseAlternativePairServiceImpl implements ChooseAlternativePairSe
     }
 
     private AlternativeEntity findMorePrior(
-        List<AlternativeEntity> altSet, ForecastFunctionEntity fFunction,
+        List<AlternativeEntity> altSet, ForecastFunction fFunction,
         DataContext dataContext) {
         var maxValue = -1.0;
         var maxIndex = -1;
@@ -64,7 +64,7 @@ public class ChooseAlternativePairServiceImpl implements ChooseAlternativePairSe
 
     @Override
     public AlternativePair findPair(
-        ForecastFunctionEntity fFunction, DataContext dataContext) {
+        ForecastFunction fFunction, DataContext dataContext) {
         var B = generateBSet(dataContext);
         var first = findMorePrior(B, fFunction, dataContext);
         B.remove(first);
